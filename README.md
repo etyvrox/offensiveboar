@@ -1,5 +1,4 @@
 <p align="center">
-  <img alt="OffensiveBoar Logo" src="https://storage.googleapis.com/offensiveboar-static-sources/pixel_pig.png" height="140" />
   <h2 align="center">OffensiveBoar</h2>
   <p align="center">Find leaked credentials.</p>
 </p>

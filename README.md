@@ -6,16 +6,6 @@
 
 ---
 
-<div align="center">
-
-[![Go Report Card](https://goreportcard.com/badge/github.com/etyvrox/offensiveboar/v3)](https://goreportcard.com/report/github.com/etyvrox/offensiveboar/v3)
-[![License](https://img.shields.io/badge/license-AGPL--3.0-brightgreen)](/LICENSE)
-[![Total Detectors](https://img.shields.io/github/directory-file-count/etyvrox/offensiveboar/pkg/detectors?label=Total%20Detectors&type=dir)](/pkg/detectors)
-
-</div>
-
----
-
 # What is OffensiveBoar 🐽
 
 **OffensiveBoar** is an enhanced fork of TruffleHog with additional features for comprehensive secret scanning. It is a powerful tool for **Discovery, Classification, Validation,** and **Analysis** of leaked credentials. In this context, secret refers to a credential a machine uses to authenticate itself to another machine. This includes API keys, database passwords, private encryption keys, tokens, and more.
@@ -104,44 +94,6 @@ offensiveboar s3 --bucket=<bucket name> --results=verified,unknown
 ```
 
 # :floppy_disk: Installation
-
-### MacOS users
-
-```bash
-brew install offensiveboar
-```
-
-### Docker:
-
-#### Unix
-
-```bash
-docker run --rm -it -v "$PWD:/pwd" etyvrox/offensiveboar:latest github --repo https://github.com/your-org/your-repo
-```
-
-#### Windows Command Prompt
-
-```bash
-docker run --rm -it -v "%cd:/=\%:/pwd" etyvrox/offensiveboar:latest github --repo https://github.com/your-org/your-repo
-```
-
-#### Windows PowerShell
-
-```bash
-docker run --rm -it -v "${PWD}:/pwd" etyvrox/offensiveboar github --repo https://github.com/your-org/your-repo
-```
-
-#### M1 and M2 Mac
-
-```bash
-docker run --platform linux/arm64 --rm -it -v "$PWD:/pwd" etyvrox/offensiveboar:latest github --repo https://github.com/your-org/your-repo
-```
-
-### Binary releases
-
-```bash
-Download and unpack from https://github.com/etyvrox/offensiveboar/releases
-```
 
 ### Compile from source
 

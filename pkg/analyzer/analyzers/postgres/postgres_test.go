@@ -12,9 +12,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/analyzer/analyzers"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/analyzer/config"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/analyzer/analyzers"
+	"github.com/etyvrox/offensiveboar/v3/pkg/analyzer/config"
+	"github.com/etyvrox/offensiveboar/v3/pkg/context"
 )
 
 const (

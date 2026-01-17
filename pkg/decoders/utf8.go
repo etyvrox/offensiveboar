@@ -3,8 +3,8 @@ package decoders
 import (
 	"unicode/utf8"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/detectorspb"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sources"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/detectorspb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sources"
 )
 
 type UTF8 struct{}

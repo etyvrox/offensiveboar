@@ -15,8 +15,8 @@ import (
 	"github.com/kylelemons/godebug/pretty"
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/wait"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/detectorspb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/detectors"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/detectorspb"
 )
 
 func setupACLConfigFile(redisUser, redisPass string) (*os.File, error) {

@@ -12,15 +12,15 @@ import (
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/common"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/detectorspb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/detectors"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/detectorspb"
 )
 
 func TestGCP_FromChunk(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
 	defer cancel()
-	testSecrets, err := common.GetSecret(ctx, "trufflehog-testing", "detectors5")
+	testSecrets, err := common.GetSecret(ctx, "offensiveboar-testing", "detectors5")
 	if err != nil {
 		t.Fatalf("could not get test secrets from GCP: %s", err)
 	}
@@ -96,10 +96,10 @@ func TestGCP_FromChunk(t *testing.T) {
 				{
 					DetectorType: detectorspb.DetectorType_GCP,
 					Verified:     false,
-					Redacted:     "detector-test@trufflehog-testing.iam.gserviceaccount.com",
+					Redacted:     "detector-test@offensiveboar-testing.iam.gserviceaccount.com",
 					ExtraData: map[string]string{
 						"rotation_guide": "https://howtorotate.com/docs/tutorials/gcp/",
-						"project":        "trufflehog-testing",
+						"project":        "offensiveboar-testing",
 						"private_key_id": "95cf38cc5e63007aa066e8a710fc64c3554d77f4",
 					},
 				},
@@ -148,7 +148,7 @@ func TestGCP_FromChunk(t *testing.T) {
 func TestGCP_KeyIDPopulation(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
 	defer cancel()
-	testSecrets, err := common.GetSecret(ctx, "trufflehog-testing", "detectors5")
+	testSecrets, err := common.GetSecret(ctx, "offensiveboar-testing", "detectors5")
 	if err != nil {
 		t.Fatalf("could not get test secrets from GCP: %s", err)
 	}
@@ -172,7 +172,7 @@ func TestGCP_KeyIDPopulation(t *testing.T) {
 		t.Error("private_key_id not found in ExtraData")
 	}
 
-	// Since the test service account is disabled (detector-test@trufflehog-testing),
+	// Since the test service account is disabled (detector-test@offensiveboar-testing),
 	// the x509 endpoint returns 404, so we expect fallback to the embedded private_key_id from the JSON
 	if privateKeyID == "" {
 		t.Error("private_key_id should not be empty")

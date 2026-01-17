@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package custom_detectors;
 
-option go_package = "github.com/trufflesecurity/trufflehog/v3/pkg/pb/custom_detectorspb";
+option go_package = "github.com/etyvrox/offensiveboar/v3/pkg/pb/custom_detectorspb";
 
 import "validate/validate.proto";
 

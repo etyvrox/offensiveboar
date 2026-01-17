@@ -1,4 +1,4 @@
-package trufflehogenterprise
+package offensiveboarenterprise
 
 import (
 	"context"
@@ -7,9 +7,9 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/common"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/detectorspb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/detectors"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/detectorspb"
 )
 
 type Scanner struct {
@@ -25,7 +25,7 @@ var (
 	// Make sure that your group is surrounded in boundary characters such as below to reduce false positives.
 	keyPat      = regexp.MustCompile(`\bthog-key-[0-9a-f]{16}\b`)
 	secretPat   = regexp.MustCompile(`\bthog-secret-[0-9a-f]{32}\b`)
-	hostnamePat = regexp.MustCompile(`\b[a-z]+-[a-z]+-[a-z]+\.[a-z][0-9]\.[a-z]+\.trufflehog\.org\b`)
+	hostnamePat = regexp.MustCompile(`\b[a-z]+-[a-z]+-[a-z]+\.[a-z][0-9]\.[a-z]+\.offensiveboar\.org\b`)
 )
 
 // Keywords are used for efficiently pre-filtering chunks.
@@ -34,7 +34,7 @@ func (s Scanner) Keywords() []string {
 	return []string{"thog"}
 }
 
-// FromData will find and optionally verify TruffleHog Enterprise secrets in a given set of bytes.
+// FromData will find and optionally verify OffensiveBoar Enterprise secrets in a given set of bytes.
 func (s Scanner) FromData(ctx context.Context, verify bool, data []byte) (results []detectors.Result, err error) {
 	dataStr := string(data)
 
@@ -63,7 +63,7 @@ func (s Scanner) FromData(ctx context.Context, verify bool, data []byte) (result
 						continue
 					}
 
-					req.Header.Add("Accept", "application/vnd.trufflehogenterprise+json; version=3")
+					req.Header.Add("Accept", "application/vnd.offensiveboarenterprise+json; version=3")
 					req.Header.Add("X-Thog-Secret", resSecretMatch)
 					req.Header.Add("X-Thog-Key", resKeyMatch)
 
@@ -95,5 +95,5 @@ func (s Scanner) Type() detectorspb.DetectorType {
 }
 
 func (s Scanner) Description() string {
-	return "TruffleHog Enterprise is a tool for detecting and verifying secrets in your codebase. The keys and secrets detected can be used to access TruffleHog Enterprise services."
+	return "OffensiveBoar Enterprise is a tool for detecting and verifying secrets in your codebase. The keys and secrets detected can be used to access OffensiveBoar Enterprise services."
 }

@@ -11,7 +11,7 @@ import (
 
 	lru "github.com/hashicorp/golang-lru/v2"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/cache"
+	"github.com/etyvrox/offensiveboar/v3/pkg/cache"
 )
 
 // Cache is a generic LRU-sized cache that stores key-value pairs with a maximum size limit.

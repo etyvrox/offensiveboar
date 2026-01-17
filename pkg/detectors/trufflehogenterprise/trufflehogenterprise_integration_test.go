@@ -1,7 +1,7 @@
 //go:build detectors
 // +build detectors
 
-package trufflehogenterprise
+package offensiveboarenterprise
 
 import (
 	"context"
@@ -10,16 +10,16 @@ import (
 	"time"
 
 	"github.com/kylelemons/godebug/pretty"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors"
+	"github.com/etyvrox/offensiveboar/v3/pkg/detectors"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/common"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/detectorspb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/detectorspb"
 )
 
 func TestTrufflehogenterprise_FromChunk(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
 	defer cancel()
-	testSecrets, err := common.GetSecret(ctx, "trufflehog-testing", "detectors5")
+	testSecrets, err := common.GetSecret(ctx, "offensiveboar-testing", "detectors5")
 	if err != nil {
 		t.Fatalf("could not get test secrets from GCP: %s", err)
 	}
@@ -61,7 +61,7 @@ func TestTrufflehogenterprise_FromChunk(t *testing.T) {
 			s:    Scanner{},
 			args: args{
 				ctx:    context.Background(),
-				data:   []byte(fmt.Sprintf("You can find a trufflehogenterprise secret %s for %s with key %s within but not valid", inactiveSecret, host, key)), // the secret would satisfy the regex but not pass validation
+				data:   []byte(fmt.Sprintf("You can find a offensiveboarenterprise secret %s for %s with key %s within but not valid", inactiveSecret, host, key)), // the secret would satisfy the regex but not pass validation
 				verify: true,
 			},
 			want: []detectors.Result{

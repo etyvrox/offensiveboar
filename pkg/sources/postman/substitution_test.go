@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/context"
 )
 
 func TestNewSubstitution(t *testing.T) {

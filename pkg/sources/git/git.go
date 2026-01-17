@@ -26,16 +26,16 @@ import (
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/cleantemp"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/common"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/context"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/feature"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/gitparse"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/handlers"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/source_metadatapb"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/sourcespb"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sanitizer"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sources"
+	"github.com/etyvrox/offensiveboar/v3/pkg/cleantemp"
+	"github.com/etyvrox/offensiveboar/v3/pkg/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/feature"
+	"github.com/etyvrox/offensiveboar/v3/pkg/gitparse"
+	"github.com/etyvrox/offensiveboar/v3/pkg/handlers"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/source_metadatapb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/sourcespb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sanitizer"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sources"
 )
 
 const SourceType = sourcespb.SourceType_SOURCE_TYPE_GIT
@@ -303,7 +303,7 @@ func (s *Source) scanRepo(ctx context.Context, repoURI string, reporter sources.
 		// remove the directory only if it was created as a temporary path, or if it is a clone path and --no-cleanup is not set.
 		// if legacy JSON is enabled, don't remove the directory because we need it for outputting legacy JSON.
 		if !s.conn.GetPrintLegacyJson() {
-			if strings.HasPrefix(path, filepath.Join(os.TempDir(), "trufflehog")) || (!s.conn.GetNoCleanup() && s.conn.GetClonePath() != "") {
+			if strings.HasPrefix(path, filepath.Join(os.TempDir(), "offensiveboar")) || (!s.conn.GetNoCleanup() && s.conn.GetClonePath() != "") {
 				defer os.RemoveAll(path)
 			}
 		}
@@ -357,7 +357,7 @@ func (s *Source) scanDir(ctx context.Context, gitDir string, reporter sources.Ch
 		// remove the directory only if it was created as a temporary path, or if it is a clone path and --no-cleanup is not set.
 		// if legacy JSON is enabled, don't remove the directory because we need it for outputting legacy JSON.
 		if !s.conn.GetPrintLegacyJson() {
-			if strings.HasPrefix(gitDir, filepath.Join(os.TempDir(), "trufflehog")) || (!s.conn.GetNoCleanup() && s.conn.GetClonePath() != "") {
+			if strings.HasPrefix(gitDir, filepath.Join(os.TempDir(), "offensiveboar")) || (!s.conn.GetNoCleanup() && s.conn.GetClonePath() != "") {
 				defer os.RemoveAll(gitDir)
 			}
 		}
@@ -460,9 +460,9 @@ func CloneRepo(ctx context.Context, userInfo *url.Userinfo, gitURL string, clone
 	var path string
 	var err error
 
-	// If --clone-path is set, create a subdirectory <clonePath>/trufflehog-<repo-name> with permissions 0755.
+	// If --clone-path is set, create a subdirectory <clonePath>/offensiveboar-<repo-name> with permissions 0755.
 	if clonePath != "" {
-		path = filepath.Join(clonePath, "trufflehog-"+strings.TrimSuffix(filepath.Base(gitURL), gitDirName))
+		path = filepath.Join(clonePath, "offensiveboar-"+strings.TrimSuffix(filepath.Base(gitURL), gitDirName))
 		if err = os.MkdirAll(path, 0755); err != nil {
 			return "", nil, fmt.Errorf("failed to create clone path %s: %w", clonePath, err)
 		}
@@ -610,7 +610,7 @@ func PingRepoUsingToken(ctx context.Context, token, gitUrl, user string) error {
 	// We don't actually care about any refs on the remote, we just care whether can can list them at all. So we query
 	// only for a ref that we know won't exist to minimize the search time on the remote. (By default, ls-remote exits
 	// with 0 even if it doesn't find any matching refs.)
-	fakeRef := "TRUFFLEHOG_CHECK_GIT_REMOTE_URL_REACHABILITY"
+	fakeRef := "OFFENSIVEBOAR_CHECK_GIT_REMOTE_URL_REACHABILITY"
 	gitArgs := []string{"ls-remote", lsUrl.String(), "--quiet", fakeRef}
 	cmd := exec.Command("git", gitArgs...)
 	output, err := cmd.CombinedOutput()
@@ -742,7 +742,7 @@ func (s *Git) ScanCommits(ctx context.Context, repo *git.Repository, path string
 			logger.V(5).Info("scanning commit", "commit", fullHash)
 
 			// Scan the commit metadata.
-			// See https://github.com/trufflesecurity/trufflehog/issues/2683
+			// See https://github.com/trufflesecurity/offensiveboar/issues/2683
 			var (
 				metadata = s.sourceMetadataFunc("", email, fullHash, when, remoteURL, path, 0)
 				sb       strings.Builder

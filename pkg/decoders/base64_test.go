@@ -5,8 +5,8 @@ import (
 
 	"github.com/kylelemons/godebug/pretty"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sources"
+	"github.com/etyvrox/offensiveboar/v3/pkg/detectors"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sources"
 )
 
 func TestBase64_FromChunk(t *testing.T) {
@@ -111,7 +111,7 @@ func TestBase64_FromChunk(t *testing.T) {
 				Data: []byte(`dHJ1ZmZsZWhvZz4-ZmluZHMtc2VjcmV0cw`),
 			},
 			want: &sources.Chunk{
-				Data: []byte(`trufflehog>>finds-secrets`),
+				Data: []byte(`offensiveboar>>finds-secrets`),
 			},
 		},
 		{

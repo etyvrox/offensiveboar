@@ -15,8 +15,8 @@ import (
 	"github.com/go-errors/errors"
 	"github.com/jpillora/overseer/fetcher"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/context"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/version"
+	"github.com/etyvrox/offensiveboar/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/version"
 )
 
 func Fetcher(cmd string, tui bool) fetcher.Interface {
@@ -36,7 +36,7 @@ func (g *OSS) Init() error {
 	return nil
 }
 
-const url = "https://oss.trufflehog.org/updates"
+const url = "https://oss.offensiveboar.org/updates"
 
 type FormData struct {
 	OS             string
@@ -63,7 +63,7 @@ func (g *OSS) Fetch() (io.Reader, error) {
 		Cmd:            g.Cmd,
 		TUI:            g.TUI,
 		Timezone:       zone,
-		Binary:         "trufflehog",
+		Binary:         "offensiveboar",
 	}
 
 	dataByte, err := json.Marshal(data)
@@ -81,7 +81,7 @@ func (g *OSS) Fetch() (io.Reader, error) {
 		return nil, errors.New("already up to date")
 	}
 
-	context.Background().Logger().V(2).Info("fetching trufflehog update")
+	context.Background().Logger().V(2).Info("fetching offensiveboar update")
 
 	newBinBytes, err := io.ReadAll(resp.Body)
 	if err != nil {
@@ -96,7 +96,7 @@ func (g *OSS) Fetch() (io.Reader, error) {
 			return nil, errors.Errorf("Failed to read zip archive: %s", err)
 		}
 		for _, f := range zipReader.File {
-			if strings.HasPrefix(f.Name, "trufflehog") {
+			if strings.HasPrefix(f.Name, "offensiveboar") {
 				return f.Open()
 			}
 		}
@@ -114,7 +114,7 @@ func (g *OSS) Fetch() (io.Reader, error) {
 			}
 
 			if header.Typeflag == tar.TypeReg {
-				if strings.HasPrefix(header.Name, "trufflehog") {
+				if strings.HasPrefix(header.Name, "offensiveboar") {
 					return tarReader, nil
 				}
 			}

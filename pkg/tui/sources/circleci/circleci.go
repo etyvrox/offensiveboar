@@ -3,8 +3,8 @@ package circleci
 import (
 	"strings"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/tui/common"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/tui/components/textinputs"
+	"github.com/etyvrox/offensiveboar/v3/pkg/tui/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/tui/components/textinputs"
 )
 
 type circleCiCmdModel struct {
@@ -24,7 +24,7 @@ func GetFields() circleCiCmdModel {
 
 func (m circleCiCmdModel) Cmd() string {
 	var command []string
-	command = append(command, "trufflehog", "circleci")
+	command = append(command, "offensiveboar", "circleci")
 
 	inputs := m.GetInputs()
 	command = append(command, "--token="+inputs["token"].Value)

@@ -3,8 +3,8 @@ package common
 import (
 	"github.com/aymanbagabas/go-osc52"
 	zone "github.com/lrstanley/bubblezone"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/tui/keymap"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/tui/styles"
+	"github.com/etyvrox/offensiveboar/v3/pkg/tui/keymap"
+	"github.com/etyvrox/offensiveboar/v3/pkg/tui/styles"
 )
 
 // Common is a struct all components should embed.

@@ -4,10 +4,10 @@ import (
 	"github.com/charmbracelet/bubbles/key"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/tui/common"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/tui/components/tabs"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/tui/components/textinputs"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/tui/sources"
+	"github.com/etyvrox/offensiveboar/v3/pkg/tui/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/tui/components/tabs"
+	"github.com/etyvrox/offensiveboar/v3/pkg/tui/components/textinputs"
+	"github.com/etyvrox/offensiveboar/v3/pkg/tui/sources"
 )
 
 type SetSourceMsg struct {
@@ -25,7 +25,7 @@ const (
 func (t tab) String() string {
 	return []string{
 		"1. Source Configuration",
-		"2. TruffleHog Configuration",
+		"2. OffensiveBoar Configuration",
 		"3. Run",
 	}[t]
 }

@@ -11,14 +11,14 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/context"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/decoders"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/engine/defaults"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/feature"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/source_metadatapb"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sources"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sources/git"
+	"github.com/etyvrox/offensiveboar/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/decoders"
+	"github.com/etyvrox/offensiveboar/v3/pkg/detectors"
+	"github.com/etyvrox/offensiveboar/v3/pkg/engine/defaults"
+	"github.com/etyvrox/offensiveboar/v3/pkg/feature"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/source_metadatapb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sources"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sources/git"
 )
 
 type expResult struct {
@@ -126,7 +126,7 @@ func TestGitEngine(t *testing.T) {
 func TestGitEngineWithMirrorAndBareClones(t *testing.T) {
 	ctx := context.Background()
 
-	parent, err := os.MkdirTemp("", "trufflehog-test-keys-*")
+	parent, err := os.MkdirTemp("", "offensiveboar-test-keys-*")
 	if err != nil {
 		t.Fail()
 	}

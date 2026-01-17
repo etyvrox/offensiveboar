@@ -9,8 +9,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/common"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/feature"
+	"github.com/etyvrox/offensiveboar/v3/pkg/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/feature"
 )
 
 var DetectorHttpClientWithNoLocalAddresses *http.Client
@@ -21,9 +21,9 @@ const DefaultResponseTimeout = 10 * time.Second
 
 func userAgent() string {
 	if len(feature.UserAgentSuffix.Load()) > 0 {
-		return "TruffleHog " + feature.UserAgentSuffix.Load()
+		return "OffensiveBoar " + feature.UserAgentSuffix.Load()
 	}
-	return "TruffleHog"
+	return "OffensiveBoar"
 }
 
 func init() {

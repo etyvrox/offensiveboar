@@ -4,14 +4,14 @@ set -o errexit
 usage() {
   this=$1
   cat <<EOF
-$this: download go binaries for trufflesecurity/trufflehog
+$this: download go binaries for trufflesecurity/offensiveboar
 
 Usage: $this [-b] bindir [-d] [tag]
   -b sets bindir or installation directory, Defaults to ./bin
   -d turns on debug logging
   -v verify checksum signature. Require cosign binary to be installed.
    [tag] is a tag from
-   https://github.com/trufflesecurity/trufflehog/releases
+   https://github.com/trufflesecurity/offensiveboar/releases
    If tag is missing, then the latest will be used.
 
 EOF
@@ -69,12 +69,12 @@ execute() {
 
 get_binary() {
   case "$PLATFORM" in
-    darwin/amd64) BINARY="trufflehog" ;;
-    darwin/arm64) BINARY="trufflehog" ;;
-    linux/amd64) BINARY="trufflehog" ;;
-    linux/arm64) BINARY="trufflehog" ;;
-    windows/amd64) BINARY="trufflehog" ;;
-    windows/arm64) BINARY="trufflehog" ;;  
+    darwin/amd64) BINARY="offensiveboar" ;;
+    darwin/arm64) BINARY="offensiveboar" ;;
+    linux/amd64) BINARY="offensiveboar" ;;
+    linux/arm64) BINARY="offensiveboar" ;;
+    windows/amd64) BINARY="offensiveboar" ;;
+    windows/arm64) BINARY="offensiveboar" ;;  
     *)
       log_crit "platform $PLATFORM is not supported.  Make sure this script is up-to-date and file request at https://github.com/${PREFIX}/issues/new"
       exit 1
@@ -359,9 +359,9 @@ End of functions from https://github.com/client9/shlib
 ------------------------------------------------------------------------
 EOF
 
-PROJECT_NAME="trufflehog"
+PROJECT_NAME="offensiveboar"
 OWNER=trufflesecurity
-REPO="trufflehog"
+REPO="offensiveboar"
 FORMAT=tar.gz
 OS=$(uname_os)
 ARCH=$(uname_arch)

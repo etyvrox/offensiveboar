@@ -11,7 +11,7 @@ The Permissions are initially defined as a [yaml file](analyzers/twilio/permissi
 
 At the top of the [analyzer implementation](analyzers/twilio/twilio.go) you specify the go generate command.
 
-You can install the generator with `go install github.com/trufflesecurity/trufflehog/v3/pkg/analyzer/generate_permissions`.
+You can install the generator with `go install github.com/trufflesecurity/offensiveboar/v3/pkg/analyzer/generate_permissions`.
 
 Then you can run `go generate ./...` to generate the Permission types for the analyzer.
 

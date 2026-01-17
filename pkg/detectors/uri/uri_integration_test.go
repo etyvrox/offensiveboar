@@ -10,9 +10,9 @@ import (
 	"time"
 
 	"github.com/kylelemons/godebug/pretty"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/common"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/detectorspb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/detectors"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/detectorspb"
 )
 
 func TestURI_FromChunk(t *testing.T) {

@@ -9,8 +9,8 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/context"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sources"
+	"github.com/etyvrox/offensiveboar/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sources"
 )
 
 // createFilesystemTree is a helper function to create a temporary directory
@@ -19,7 +19,7 @@ import (
 // the root directory is returned and the caller is responsible for removing it
 // from the filesystem.
 func createFilesystemTree(files map[string]string) (string, error) {
-	parentDir, err := os.MkdirTemp("", "trufflehog-integration-test")
+	parentDir, err := os.MkdirTemp("", "offensiveboar-integration-test")
 	if err != nil {
 		return "", err
 	}

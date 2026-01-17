@@ -1,4 +1,4 @@
-module github.com/trufflesecurity/trufflehog/v3
+module github.com/etyvrox/offensiveboar/v3
 
 go 1.24.0
 

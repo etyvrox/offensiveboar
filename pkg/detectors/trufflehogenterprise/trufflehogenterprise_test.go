@@ -1,4 +1,4 @@
-package trufflehogenterprise
+package offensiveboarenterprise
 
 import (
 	"context"
@@ -7,8 +7,8 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/engine/ahocorasick"
+	"github.com/etyvrox/offensiveboar/v3/pkg/detectors"
+	"github.com/etyvrox/offensiveboar/v3/pkg/engine/ahocorasick"
 )
 
 var (
@@ -16,9 +16,9 @@ var (
     invalidKey      = "thog-key-946?7e0fbee2baff"
     validSecret     = "thog-secret-8fbfc135085421e62d8f1982af17bbf6"
     invalidSecret   = "thog-secret-8fbfc13?085421e62d8f1982af17bbf6"
-    validHostname   = "uryfanaextzftqnwkordjwtrascqbihyctwttsntssxgbmgtnghmaiossoiablwqntsnudfdz-grthynfwdntsfdyuvk-tqfecqndhkmebecezcyzptxnsgprzkdcwzwnzdxpm.v6.zfjkrzjmutvvwwqftipvtkdwg.trufflehog.org"
-    invalidHostname = "?ryfanaextzftqnwkordjwtrascqbihyctwttsntssxgbmgtnghmaiossoiablwqntsnudfdz-grthynfwdntsfdyuvk-tqfecqndhkmebecezcyzptxnsgprzkdcwzwnzdxpm.v6.zfjkrzjmutvvwwqftipvtkdwg.trufflehog.org"
-    keyword         = "trufflehogenterprise"
+    validHostname   = "uryfanaextzftqnwkordjwtrascqbihyctwttsntssxgbmgtnghmaiossoiablwqntsnudfdz-grthynfwdntsfdyuvk-tqfecqndhkmebecezcyzptxnsgprzkdcwzwnzdxpm.v6.zfjkrzjmutvvwwqftipvtkdwg.offensiveboar.org"
+    invalidHostname = "?ryfanaextzftqnwkordjwtrascqbihyctwttsntssxgbmgtnghmaiossoiablwqntsnudfdz-grthynfwdntsfdyuvk-tqfecqndhkmebecezcyzptxnsgprzkdcwzwnzdxpm.v6.zfjkrzjmutvvwwqftipvtkdwg.offensiveboar.org"
+    keyword         = "offensiveboarenterprise"
 )
 
 func TestTrufflehogenterprise_Pattern(t *testing.T) {
@@ -30,7 +30,7 @@ func TestTrufflehogenterprise_Pattern(t *testing.T) {
 		want  []string
 	}{
 		{
-			name:  "valid pattern - with keyword trufflehogenterprise",
+			name:  "valid pattern - with keyword offensiveboarenterprise",
 			input: fmt.Sprintf("%s token - '%s'\n%s token - '%s'\n%s token - '%s'\n", keyword, validKey, keyword, validSecret, keyword, validHostname),
 			want:  []string{validKey},
 		},

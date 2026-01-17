@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"strings"
 
-	logContext "github.com/trufflesecurity/trufflehog/v3/pkg/context"
+	logContext "github.com/etyvrox/offensiveboar/v3/pkg/context"
 
 	mssql "github.com/microsoft/go-mssqldb"
 )

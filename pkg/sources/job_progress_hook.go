@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/context"
 )
 
 // UnitHook implements JobProgressHook for tracking the progress of each

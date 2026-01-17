@@ -7,7 +7,7 @@ mapfile -t extra_args < <(bash -c "for arg in ${*: -1}; do echo \$arg; done")
 git config --global --add safe.directory '*'
 
 if [[ $# -eq 0 ]]; then
-  /usr/bin/trufflehog --help
+  /usr/bin/offensiveboar --help
 else
-  /usr/bin/trufflehog "${@: 1: $#-1}" "${extra_args[@]}"
+  /usr/bin/offensiveboar "${@: 1: $#-1}" "${extra_args[@]}"
 fi

@@ -3,8 +3,8 @@ package elasticsearch
 import (
 	"strings"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/tui/common"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/tui/components/textinputs"
+	"github.com/etyvrox/offensiveboar/v3/pkg/tui/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/tui/components/textinputs"
 )
 
 type elasticSearchCmdModel struct {
@@ -85,7 +85,7 @@ func getConnectionKeys(inputs map[string]textinputs.Input) []string {
 
 func (m elasticSearchCmdModel) Cmd() string {
 	var command []string
-	command = append(command, "trufflehog", "elasticsearch")
+	command = append(command, "offensiveboar", "elasticsearch")
 	inputs := m.GetInputs()
 
 	for _, key := range getConnectionKeys(inputs) {

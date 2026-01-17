@@ -5,9 +5,9 @@ import (
 
 	"github.com/charmbracelet/bubbles/key"
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/tui/common"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/tui/sources"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/tui/styles"
+	"github.com/etyvrox/offensiveboar/v3/pkg/tui/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/tui/sources"
+	"github.com/etyvrox/offensiveboar/v3/pkg/tui/styles"
 )
 
 type SourceComponent struct {

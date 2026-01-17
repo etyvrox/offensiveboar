@@ -3,8 +3,8 @@ package git
 import (
 	"strings"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/tui/common"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/tui/components/textinputs"
+	"github.com/etyvrox/offensiveboar/v3/pkg/tui/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/tui/components/textinputs"
 )
 
 type gitCmdModel struct {
@@ -17,7 +17,7 @@ func GetFields() gitCmdModel {
 		Key:         "uri",
 		Help:        "file:// for local git repos",
 		Required:    true,
-		Placeholder: "git@github.com:trufflesecurity/trufflehog.git",
+		Placeholder: "git@github.com:trufflesecurity/offensiveboar.git",
 	}
 
 	return gitCmdModel{textinputs.New([]textinputs.InputConfig{uri})}
@@ -25,7 +25,7 @@ func GetFields() gitCmdModel {
 
 func (m gitCmdModel) Cmd() string {
 	var command []string
-	command = append(command, "trufflehog", "git")
+	command = append(command, "offensiveboar", "git")
 
 	inputs := m.GetInputs()
 

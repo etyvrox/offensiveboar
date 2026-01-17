@@ -3,8 +3,8 @@ package s3
 import (
 	"strings"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/tui/common"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/tui/components/textinputs"
+	"github.com/etyvrox/offensiveboar/v3/pkg/tui/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/tui/components/textinputs"
 )
 
 type s3CmdModel struct {
@@ -25,7 +25,7 @@ func GetFields() s3CmdModel {
 
 func (m s3CmdModel) Cmd() string {
 	var command []string
-	command = append(command, "trufflehog", "s3")
+	command = append(command, "offensiveboar", "s3")
 
 	inputs := m.GetInputs()
 	vals := inputs["buckets"].Value

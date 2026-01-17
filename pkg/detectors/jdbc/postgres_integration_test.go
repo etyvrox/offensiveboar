@@ -16,7 +16,7 @@ import (
 	"github.com/testcontainers/testcontainers-go/modules/postgres"
 	"github.com/testcontainers/testcontainers-go/wait"
 
-	logContext "github.com/trufflesecurity/trufflehog/v3/pkg/context"
+	logContext "github.com/etyvrox/offensiveboar/v3/pkg/context"
 )
 
 func TestPostgres(t *testing.T) {

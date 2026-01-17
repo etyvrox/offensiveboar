@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	logContext "github.com/trufflesecurity/trufflehog/v3/pkg/context"
+	logContext "github.com/etyvrox/offensiveboar/v3/pkg/context"
 )
 
 func TestParseMySQLMissingCredentials(t *testing.T) {

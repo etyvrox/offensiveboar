@@ -12,9 +12,9 @@ import (
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/common"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/detectorspb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/detectors"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/detectorspb"
 )
 
 func TestSalesforceOauth2_FromData(t *testing.T) {
@@ -22,7 +22,7 @@ func TestSalesforceOauth2_FromData(t *testing.T) {
 	defer cancel()
 
 	// Fetch the correct secrets needed for the OAuth2 Client Credentials flow.
-	testSecrets, err := common.GetSecret(ctx, "trufflehog-testing", "detectors5")
+	testSecrets, err := common.GetSecret(ctx, "offensiveboar-testing", "detectors5")
 	if err != nil {
 		t.Fatalf("could not get test secrets from GCP: %s", err)
 	}

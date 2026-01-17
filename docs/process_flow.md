@@ -1,4 +1,4 @@
-# TruffleHog Process Flows
+# OffensiveBoar Process Flows
 
 ## Scans
 

@@ -8,17 +8,17 @@ import (
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/protobuf/types/known/anypb"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/common"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/context"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/sourcespb"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sources"
+	"github.com/etyvrox/offensiveboar/v3/pkg/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/sourcespb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sources"
 )
 
 func TestSource_Scan(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
 
-	secret, err := common.GetSecret(ctx, "trufflehog-testing", "test")
+	secret, err := common.GetSecret(ctx, "offensiveboar-testing", "test")
 	if err != nil {
 		t.Fatal(fmt.Errorf("failed to access secret: %v", err))
 	}
@@ -39,7 +39,7 @@ func TestSource_Scan(t *testing.T) {
 		{
 			name: "scan all projects",
 			init: init{
-				name: "trufflehog-test",
+				name: "offensiveboar-test",
 				connection: &sourcespb.CircleCI{
 					Credential: &sourcespb.CircleCI_Token{
 						Token: token,

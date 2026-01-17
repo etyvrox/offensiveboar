@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/buffers/buffer"
+	"github.com/etyvrox/offensiveboar/v3/pkg/buffers/buffer"
 )
 
 func TestNewBufferPool(t *testing.T) {

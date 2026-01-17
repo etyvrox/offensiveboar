@@ -15,8 +15,8 @@ import (
 	"github.com/k0kubun/go-ansi"
 	"github.com/schollz/progressbar/v3"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/context"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sources"
+	"github.com/etyvrox/offensiveboar/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sources"
 )
 
 // Assumption: sleeping for 60 seconds is enough to reset the secondary rate limit
@@ -546,10 +546,10 @@ func (s *Source) EnumerateAndScanAllObjects(ctx context.Context, chunksChan chan
 		return fmt.Errorf("failed to get user home directory: %w", err)
 	}
 
-	folderPath := userHomeDir + "/.trufflehog/" + owner + "/" + repoName
+	folderPath := userHomeDir + "/.offensiveboar/" + owner + "/" + repoName
 	err = os.MkdirAll(folderPath, 0755)
 	if err != nil {
-		return fmt.Errorf("failed to create .trufflehog folder in user's home directory: %w", err)
+		return fmt.Errorf("failed to create .offensiveboar folder in user's home directory: %w", err)
 	}
 
 	// get the number of forks

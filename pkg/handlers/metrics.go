@@ -4,7 +4,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/common"
 )
 
 type metrics struct {

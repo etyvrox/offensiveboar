@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/analyzer/config"
+	"github.com/etyvrox/offensiveboar/v3/pkg/analyzer/config"
 )
 
 type AnalyzeClient struct {

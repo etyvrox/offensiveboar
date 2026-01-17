@@ -8,12 +8,12 @@ import (
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/context"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/sourcespb"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sources"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sources/git"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sources/github"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sources/github_experimental"
+	"github.com/etyvrox/offensiveboar/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/sourcespb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sources"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sources/git"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sources/github"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sources/github_experimental"
 )
 
 // ScanGitHubExperimental scans GitHub using an experimental feature. Consider all functionality to be in an alpha release here.
@@ -52,7 +52,7 @@ func (e *Engine) ScanGitHubExperimental(ctx context.Context, c sources.GitHubExp
 	}
 	scanOptions := git.NewScanOptions(opts...)
 
-	sourceName := "trufflehog - github experimental (alpha release)"
+	sourceName := "offensiveboar - github experimental (alpha release)"
 	sourceID, jobID, _ := e.sourceManager.GetIDs(ctx, sourceName, github.SourceType)
 
 	githubExperimentalSource := &github_experimental.Source{}

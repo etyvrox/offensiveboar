@@ -8,10 +8,10 @@ import (
 
 	"google.golang.org/protobuf/types/known/anypb"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/common"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/context"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/source_metadatapb"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/sourcespb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/source_metadatapb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/sourcespb"
 )
 
 type (
@@ -392,6 +392,13 @@ type FilesystemConfig struct {
 }
 
 // S3Config defines the optional configuration for an S3 source.
+type JiraConfig struct {
+	// URL is the Jira instance URL (e.g., https://jira.example.com).
+	URL string
+	// Token is the Jira API token for authentication (Bearer token).
+	Token string
+}
+
 type S3Config struct {
 	// CloudCred determines whether to use cloud credentials.
 	// This can NOT be used with a secret.

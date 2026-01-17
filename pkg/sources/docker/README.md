@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Docker source enables TruffleHog to scan Docker images for secrets, credentials, and sensitive data. It supports scanning images from multiple sources including Docker registries, local Docker daemon, and tarball files.
+The Docker source enables OffensiveBoar to scan Docker images for secrets, credentials, and sensitive data. It supports scanning images from multiple sources including Docker registries, local Docker daemon, and tarball files.
 
 ## Docker Fundamentals
 
@@ -73,7 +73,7 @@ sources:
 
 **CLI Usage:**
 ```bash
-trufflehog docker --image nginx:latest
+offensiveboar docker --image nginx:latest
 ```
 
 ---
@@ -120,7 +120,7 @@ sources:
 
 **CLI Usage:**
 ```bash
-trufflehog docker --image myorg/myapp:latest --bearer-token eyJ_xxxxxxxxxxxxxxxxxxxx
+offensiveboar docker --image myorg/myapp:latest --bearer-token eyJ_xxxxxxxxxxxxxxxxxxxx
 ```
 
 ---
@@ -147,7 +147,7 @@ sources:
 docker login myregistry.com
 
 # Then scan using stored credentials
-trufflehog docker --image myregistry.com/private-image:latest
+offensiveboar docker --image myregistry.com/private-image:latest
 ```
 
 **Prerequisites:**
@@ -170,15 +170,15 @@ To scan **all images** under a namespace (organization or user):
 **CLI Usage:**
 ```bash
 # If no registry prefix is provided, Docker Hub is used by default
-trufflehog docker --namespace myorg
+offensiveboar docker --namespace myorg
 
 # For other registries, include the registry prefix (e.g., quay.io, ghcr.io)
-trufflehog docker --namespace quay.io/my_namespace
+offensiveboar docker --namespace quay.io/my_namespace
 ```
 
 To include private images within that namespace:
 ```bash
-trufflehog docker --namespace myorg --registry-token <access_token>
+offensiveboar docker --namespace myorg --registry-token <access_token>
 ```
 
 **YAML Configuration:**
@@ -208,7 +208,7 @@ Source: [GitHub Roadmap Issue #558](https://github.com/github/roadmap/issues/558
 Exclude specific files or directories from scanning using glob patterns:
 
 ```bash
-trufflehog docker --image myregistry.com/private-image:latest --exclude-paths **/*.log
+offensiveboar docker --image myregistry.com/private-image:latest --exclude-paths **/*.log
 ```
 
 ## How Image Scanning Works
@@ -240,45 +240,45 @@ trufflehog docker --image myregistry.com/private-image:latest --exclude-paths **
 ### Scanning a Public Image
 
 ```bash
-trufflehog docker --image nginx:latest
+offensiveboar docker --image nginx:latest
 ```
 
 ### Scanning All Images Under a Namespace (Beta Version)
 
 ```bash
-trufflehog docker --namespace trufflesecurity
+offensiveboar docker --namespace trufflesecurity
 ```
 
 Including private images:
 
 ```bash
-trufflehog docker --namespace trufflesecurity --registry-token ghp_xxxxxxxxxxxxxxxxxxxx
+offensiveboar docker --namespace trufflesecurity --registry-token ghp_xxxxxxxxxxxxxxxxxxxx
 ```
 
 ### Scanning Multiple Images
 
 ```bash
-trufflehog docker --image nginx:latest --image postgres:13 --image redis:alpine
+offensiveboar docker --image nginx:latest --image postgres:13 --image redis:alpine
 ```
 
 ### Scanning from Local Docker Daemon
 
 ```bash
-trufflehog docker --image docker://myapp:local
+offensiveboar docker --image docker://myapp:local
 ```
 
 ### Scanning a Tarball
 
 ```bash
 docker save myapp:latest -o myapp.tar
-trufflehog docker --image file:///path/to/myapp.tar
+offensiveboar docker --image file:///path/to/myapp.tar
 ```
 
 ### Scanning Private Registry with Authentication
 
 ```bash
 docker login my-registry.io
-trufflehog docker --image my-registry.io/private-app:v1.0.0
+offensiveboar docker --image my-registry.io/private-app:v1.0.0
 ```
 
 ## Testing Results

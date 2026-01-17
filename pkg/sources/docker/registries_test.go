@@ -8,8 +8,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/common"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/context"
 )
 
 func TestDockerhubListImages(t *testing.T) {
@@ -21,7 +21,7 @@ func TestDockerhubListImages(t *testing.T) {
 	assert.Equal(t, len(dockerImages), 7)
 
 	dockerExpectedImages := []string{
-		"trufflesecurity/trufflehog", "trufflesecurity/lint-robot", "trufflesecurity/protos",
+		"trufflesecurity/offensiveboar", "trufflesecurity/lint-robot", "trufflesecurity/protos",
 		"trufflesecurity/driftwood", "trufflesecurity/secrets", "trufflesecurity/of-cors", "trufflesecurity/email-graffiti",
 	}
 	slices.Sort(dockerImages)

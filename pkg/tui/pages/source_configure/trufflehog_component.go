@@ -5,8 +5,8 @@ import (
 
 	"github.com/charmbracelet/bubbles/key"
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/tui/common"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/tui/styles"
+	"github.com/etyvrox/offensiveboar/v3/pkg/tui/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/tui/styles"
 )
 
 type TrufflehogComponent struct {
@@ -44,7 +44,7 @@ func (m *TrufflehogComponent) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 func (m *TrufflehogComponent) View() string {
 	var view strings.Builder
 
-	view.WriteString(styles.BoldTextStyle.Render("\nConfiguring "+styles.PrimaryTextStyle.Render("TruffleHog")) + "\n")
+	view.WriteString(styles.BoldTextStyle.Render("\nConfiguring "+styles.PrimaryTextStyle.Render("OffensiveBoar")) + "\n")
 	view.WriteString(styles.HintTextStyle.Render("You can skip this completely and run with defaults") + "\n\n")
 
 	if m.form != nil {

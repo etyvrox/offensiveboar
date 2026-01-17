@@ -9,9 +9,9 @@ import (
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/google/go-cmp/cmp"
 	"github.com/testcontainers/testcontainers-go/modules/mysql"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/analyzer/analyzers"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/analyzer/config"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/analyzer/analyzers"
+	"github.com/etyvrox/offensiveboar/v3/pkg/analyzer/config"
+	"github.com/etyvrox/offensiveboar/v3/pkg/context"
 )
 
 //go:embed expected_output.json

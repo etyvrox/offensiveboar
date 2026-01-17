@@ -7,8 +7,8 @@ import (
 
 	s3types "github.com/aws/aws-sdk-go-v2/service/s3/types"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/context"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sources"
+	"github.com/etyvrox/offensiveboar/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sources"
 )
 
 // TODO [INS-207] Add role to legacy scan resumption info

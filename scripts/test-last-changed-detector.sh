@@ -8,7 +8,7 @@ while IFS= read -r FILE; do
     if [ -d "pkg/detectors/$DIRECTORY" ]
     then
         echo $DIRECTORY
-        go test -v "github.com/trufflesecurity/trufflehog/v3/pkg/detectors/$DIRECTORY"
+        go test -v "github.com/trufflesecurity/offensiveboar/v3/pkg/detectors/$DIRECTORY"
         retVal=$?
         if [ $retVal -ne 0 ]; then
            exit 1

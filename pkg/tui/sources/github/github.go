@@ -3,8 +3,8 @@ package github
 import (
 	"strings"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/tui/common"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/tui/components/textinputs"
+	"github.com/etyvrox/offensiveboar/v3/pkg/tui/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/tui/components/textinputs"
 )
 
 type githubCmdModel struct {
@@ -52,7 +52,7 @@ func (m githubCmdModel) GetSpecialInputs() map[string]textinputs.Input {
 
 func (m githubCmdModel) Cmd() string {
 	var command []string
-	command = append(command, "trufflehog", "github")
+	command = append(command, "offensiveboar", "github")
 	inputs := m.GetSpecialInputs()
 
 	if inputs["org"].Value != "" {

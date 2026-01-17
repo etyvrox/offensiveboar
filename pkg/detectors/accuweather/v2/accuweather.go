@@ -5,8 +5,8 @@ import (
 
 	regexp "github.com/wasilibs/go-re2"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors"
-	v1 "github.com/trufflesecurity/trufflehog/v3/pkg/detectors/accuweather/v1"
+	"github.com/etyvrox/offensiveboar/v3/pkg/detectors"
+	v1 "github.com/etyvrox/offensiveboar/v3/pkg/detectors/accuweather/v1"
 )
 
 type Scanner struct {

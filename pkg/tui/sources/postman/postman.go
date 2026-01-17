@@ -3,8 +3,8 @@ package postman
 import (
 	"strings"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/tui/common"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/tui/components/textinputs"
+	"github.com/etyvrox/offensiveboar/v3/pkg/tui/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/tui/components/textinputs"
 )
 
 type postmanCmdModel struct {
@@ -56,7 +56,7 @@ func findFirstNonEmptyKey(inputs map[string]textinputs.Input, keys []string) str
 
 func (m postmanCmdModel) Cmd() string {
 	var command []string
-	command = append(command, "trufflehog", "postman")
+	command = append(command, "offensiveboar", "postman")
 
 	inputs := m.GetInputs()
 	keys := []string{"workspace", "collection", "environment"}

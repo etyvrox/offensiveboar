@@ -14,8 +14,8 @@ import (
 	gh "github.com/google/go-github/v67/github"
 	"github.com/jedib0t/go-pretty/v6/table"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/analyzer/analyzers/github/common"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/analyzer/config"
+	"github.com/etyvrox/offensiveboar/v3/pkg/analyzer/analyzers/github/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/analyzer/config"
 )
 
 const (

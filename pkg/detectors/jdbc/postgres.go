@@ -7,7 +7,7 @@ import (
 	"net/url"
 	"strings"
 
-	logContext "github.com/trufflesecurity/trufflehog/v3/pkg/context"
+	logContext "github.com/etyvrox/offensiveboar/v3/pkg/context"
 
 	"github.com/lib/pq"
 )

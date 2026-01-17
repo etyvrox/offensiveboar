@@ -3,8 +3,8 @@ package huggingface
 import (
 	"strings"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/tui/common"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/tui/components/textinputs"
+	"github.com/etyvrox/offensiveboar/v3/pkg/tui/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/tui/components/textinputs"
 )
 
 type huggingFaceCmdModel struct {
@@ -52,7 +52,7 @@ func GetFields() huggingFaceCmdModel {
 
 func (m huggingFaceCmdModel) Cmd() string {
 	var command []string
-	command = append(command, "trufflehog", "huggingface")
+	command = append(command, "offensiveboar", "huggingface")
 
 	inputs := m.GetInputs()
 	keys := []string{"org", "user", "model", "space", "dataset"}

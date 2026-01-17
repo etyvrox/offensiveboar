@@ -8,8 +8,8 @@ import (
 
 	"github.com/google/go-github/v67/github"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/giturl"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/source_metadatapb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/giturl"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/source_metadatapb"
 )
 
 type repoInfoCache struct {

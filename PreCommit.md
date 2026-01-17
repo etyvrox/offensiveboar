@@ -1,8 +1,8 @@
-# TruffleHog Pre-Commit Hooks
+# OffensiveBoar Pre-Commit Hooks
 
-Pre-commit hooks are scripts that run automatically before a commit is completed, allowing you to check your code for issues before sharing it with others. TruffleHog can be integrated as a pre-commit hook to prevent credentials from leaking before they ever leave your computer.
+Pre-commit hooks are scripts that run automatically before a commit is completed, allowing you to check your code for issues before sharing it with others. OffensiveBoar can be integrated as a pre-commit hook to prevent credentials from leaking before they ever leave your computer.
 
-This guide covers how to set up TruffleHog as a pre-commit hook using two popular frameworks:
+This guide covers how to set up OffensiveBoar as a pre-commit hook using two popular frameworks:
 
 1. [Git's hooksPath feature](#global-setup-using-gits-hookspath-feature) - A built-in Git feature for managing hooks globally
 2. [Using Pre-commit framework](#using-the-pre-commit-framework) - A language-agnostic framework for managing pre-commit hooks
@@ -10,16 +10,16 @@ This guide covers how to set up TruffleHog as a pre-commit hook using two popula
 
 ## Prerequisites
 
-All of the methods require TruffleHog to be installed.
+All of the methods require OffensiveBoar to be installed.
 
-1. Install TruffleHog:
+1. Install OffensiveBoar:
 
 ```bash
 # Using Homebrew (macOS)
-brew install trufflehog
+brew install offensiveboar
 
 # Using installation script for Linux, macOS, and Windows (and WSL)
-curl -sSfL https://raw.githubusercontent.com/trufflesecurity/trufflehog/main/scripts/install.sh | sh -s -- -b /usr/local/bin
+curl -sSfL https://raw.githubusercontent.com/trufflesecurity/offensiveboar/main/scripts/install.sh | sh -s -- -b /usr/local/bin
 ```
 
 ## Global setup using Git's hooksPath feature
@@ -44,7 +44,7 @@ chmod +x ~/.git-hooks/pre-commit
 ```bash
 #!/bin/sh
 
-trufflehog git file://. --since-commit HEAD --results=verified,unknown --fail
+offensiveboar git file://. --since-commit HEAD --results=verified,unknown --fail
 ```
 
 If you are using Docker, use this instead:
@@ -52,7 +52,7 @@ If you are using Docker, use this instead:
 ```bash
 #!/bin/sh
 
-docker run --rm -v "$(pwd):/workdir" -i --rm trufflesecurity/trufflehog:latest git file:///workdir --since-commit HEAD --results=verified,unknown --fail
+docker run --rm -v "$(pwd):/workdir" -i --rm trufflesecurity/offensiveboar:latest git file:///workdir --since-commit HEAD --results=verified,unknown --fail
 ```
 
 4. Configure Git to use this hooks directory globally:
@@ -84,7 +84,7 @@ conda install -c conda-forge pre-commit
 
 ### Repository-Specific Setup
 
-To set up TruffleHog as a pre-commit hook for a specific repository:
+To set up OffensiveBoar as a pre-commit hook for a specific repository:
 
 1. Create a `.pre-commit-config.yaml` file in the root of your repository:
 
@@ -92,10 +92,10 @@ To set up TruffleHog as a pre-commit hook for a specific repository:
 repos:
   - repo: local
     hooks:
-      - id: trufflehog
-        name: TruffleHog
+      - id: offensiveboar
+        name: OffensiveBoar
         description: Detect secrets in your data.
-        entry: bash -c 'trufflehog git file://. --since-commit HEAD --results=verified,unknown --fail'
+        entry: bash -c 'offensiveboar git file://. --since-commit HEAD --results=verified,unknown --fail'
         language: system
         stages: ["pre-commit", "pre-push"]
 ```
@@ -129,18 +129,18 @@ yarn add husky --dev
 npx husky init
 ```
 
-### Setting Up TruffleHog with Husky
+### Setting Up OffensiveBoar with Husky
 
 1. Add the following content to `.husky/pre-commit`:
 
 ```bash
-echo "trufflehog git file://. --since-commit HEAD --results=verified,unknown --fail" > .husky/pre-commit
+echo "offensiveboar git file://. --since-commit HEAD --results=verified,unknown --fail" > .husky/pre-commit
 ```
 
 3. For Docker users, use this content instead:
 
 ```bash
-echo 'docker run --rm -v "$(pwd):/workdir" -i --rm trufflesecurity/trufflehog:latest git file:///workdir --since-commit HEAD --results=verified,unknown --fail' > .husky/pre-commit
+echo 'docker run --rm -v "$(pwd):/workdir" -i --rm trufflesecurity/offensiveboar:latest git file:///workdir --since-commit HEAD --results=verified,unknown --fail' > .husky/pre-commit
 ```
 
 ## Best Practices
@@ -149,7 +149,7 @@ echo 'docker run --rm -v "$(pwd):/workdir" -i --rm trufflesecurity/trufflehog:la
 
 For optimal hook efficacy:
 
-1. Execute `git add` followed by `git commit` separately. This ensures TruffleHog analyzes all intended changes.
+1. Execute `git add` followed by `git commit` separately. This ensures OffensiveBoar analyzes all intended changes.
 2. Avoid using `git commit -am`, as it might bypass pre-commit hook execution for unstaged modifications.
 
 ### Skipping Hooks
@@ -162,16 +162,16 @@ git commit --no-verify -m "Your commit message"
 
 ### Running in Audit Mode
 
-You can run the TruffleHog pre-commit hook in an "audit" or "non-enforcement" mode to test the git hook with the following commands:
+You can run the OffensiveBoar pre-commit hook in an "audit" or "non-enforcement" mode to test the git hook with the following commands:
 
 Local Binary Version:
 ```bash
-trufflehog git file://. --since-commit HEAD --results=verified,unknown 2>/dev/null
+offensiveboar git file://. --since-commit HEAD --results=verified,unknown 2>/dev/null
 ```
 
 Docker Container Version:
 ```bash
-docker run --rm -v "$(pwd):/workdir" -i --rm trufflesecurity/trufflehog:latest git file:///workdir --since-commit HEAD --results=verified,unknown 2>/dev/null
+docker run --rm -v "$(pwd):/workdir" -i --rm trufflesecurity/offensiveboar:latest git file:///workdir --since-commit HEAD --results=verified,unknown 2>/dev/null
 ```
 
 This change does two things: (1) removes the `--fail` flag, which means the pre-commit hook will *always* pass, (2) suppresses `stderr` output, so only verified secrets are printed to the terminal output.
@@ -201,10 +201,10 @@ If your pre-commit hook isn't running:
 If you're getting false positives:
 
 1. Use the `--results=verified` flag to only show verified secrets
-2. Add `trufflehog:ignore` comments on lines with known false positives or risk-accepted findings
+2. Add `offensiveboar:ignore` comments on lines with known false positives or risk-accepted findings
 
 ## Conclusion
 
-By integrating TruffleHog into your pre-commit workflow, you can prevent credential leaks before they happen. Choose the setup method that best fits your project's needs and development workflow.
+By integrating OffensiveBoar into your pre-commit workflow, you can prevent credential leaks before they happen. Choose the setup method that best fits your project's needs and development workflow.
 
-For more information on TruffleHog's capabilities, refer to the [main documentation](README.md).
+For more information on OffensiveBoar's capabilities, refer to the [main documentation](README.md).

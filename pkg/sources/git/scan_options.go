@@ -2,7 +2,7 @@ package git
 
 import (
 	"github.com/go-git/go-git/v5"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/common"
 )
 
 type ScanOptions struct {

@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/analyzer/analyzers/airtable/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/analyzer/analyzers/airtable/common"
 )
 
 type AirtableRecordsResponse struct {

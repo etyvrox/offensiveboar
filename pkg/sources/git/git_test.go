@@ -12,17 +12,17 @@ import (
 
 	"github.com/kylelemons/godebug/pretty"
 	"github.com/stretchr/testify/assert"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/feature"
+	"github.com/etyvrox/offensiveboar/v3/pkg/feature"
 	"google.golang.org/protobuf/types/known/anypb"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/common"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/context"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/credentialspb"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/source_metadatapb"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/sourcespb"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/process"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sources"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sourcestest"
+	"github.com/etyvrox/offensiveboar/v3/pkg/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/credentialspb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/source_metadatapb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/sourcespb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/process"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sources"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sourcestest"
 )
 
 func TestClone_Timeout(t *testing.T) {

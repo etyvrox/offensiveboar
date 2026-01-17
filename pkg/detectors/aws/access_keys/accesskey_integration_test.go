@@ -14,9 +14,9 @@ import (
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/stretchr/testify/assert"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/common"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/detectorspb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/detectors"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/detectorspb"
 )
 
 const canaryAccessKeyID = "AKIASP2TPHJSQH3FJRUX"
@@ -33,7 +33,7 @@ var unverifiedSecretClient = common.ConstantResponseHttpClient(403, `{"Error": {
 func TestAWS_FromChunk_InvalidValidReuseIDSequence(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
 	defer cancel()
-	testSecrets, err := common.GetSecret(ctx, "trufflehog-testing", "detectors4")
+	testSecrets, err := common.GetSecret(ctx, "offensiveboar-testing", "detectors4")
 	if err != nil {
 		t.Fatalf("could not get test secrets from GCP: %s", err)
 	}
@@ -73,7 +73,7 @@ func TestAWS_FromChunk_InvalidValidReuseIDSequence(t *testing.T) {
 				ExtraData: map[string]string{
 					"resource_type":  "Access key",
 					"account":        "619888638459",
-					"arn":            "arn:aws:iam::619888638459:user/trufflehog-aws-detector-tester",
+					"arn":            "arn:aws:iam::619888638459:user/offensiveboar-aws-detector-tester",
 					"rotation_guide": "https://howtorotate.com/docs/tutorials/aws/",
 					"user_id":        "AIDAZAVB57H5V3Q4ACRGM",
 				},
@@ -88,7 +88,7 @@ func TestAWS_FromChunk_InvalidValidReuseIDSequence(t *testing.T) {
 func TestAWS_FromChunk(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
 	defer cancel()
-	testSecrets, err := common.GetSecret(ctx, "trufflehog-testing", "detectors4")
+	testSecrets, err := common.GetSecret(ctx, "offensiveboar-testing", "detectors4")
 	if err != nil {
 		t.Fatalf("could not get test secrets from GCP: %s", err)
 	}
@@ -128,7 +128,7 @@ func TestAWS_FromChunk(t *testing.T) {
 					ExtraData: map[string]string{
 						"resource_type":  "Access key",
 						"account":        "619888638459",
-						"arn":            "arn:aws:iam::619888638459:user/trufflehog-aws-detector-tester",
+						"arn":            "arn:aws:iam::619888638459:user/offensiveboar-aws-detector-tester",
 						"rotation_guide": "https://howtorotate.com/docs/tutorials/aws/",
 						"user_id":        "AIDAZAVB57H5V3Q4ACRGM",
 					},
@@ -193,7 +193,7 @@ func TestAWS_FromChunk(t *testing.T) {
 					ExtraData: map[string]string{
 						"resource_type":  "Access key",
 						"account":        "619888638459",
-						"arn":            "arn:aws:iam::619888638459:user/trufflehog-aws-detector-tester",
+						"arn":            "arn:aws:iam::619888638459:user/offensiveboar-aws-detector-tester",
 						"rotation_guide": "https://howtorotate.com/docs/tutorials/aws/",
 						"user_id":        "AIDAZAVB57H5V3Q4ACRGM",
 					},
@@ -228,7 +228,7 @@ func TestAWS_FromChunk(t *testing.T) {
 					ExtraData: map[string]string{
 						"resource_type":  "Access key",
 						"account":        "619888638459",
-						"arn":            "arn:aws:iam::619888638459:user/trufflehog-aws-detector-tester",
+						"arn":            "arn:aws:iam::619888638459:user/offensiveboar-aws-detector-tester",
 						"rotation_guide": "https://howtorotate.com/docs/tutorials/aws/",
 						"user_id":        "AIDAZAVB57H5V3Q4ACRGM",
 					},
@@ -394,7 +394,7 @@ func TestAWS_FromChunk(t *testing.T) {
 					ExtraData: map[string]string{
 						"resource_type":  "Access key",
 						"account":        "619888638459",
-						"arn":            "arn:aws:iam::619888638459:user/trufflehog-aws-detector-tester",
+						"arn":            "arn:aws:iam::619888638459:user/offensiveboar-aws-detector-tester",
 						"rotation_guide": "https://howtorotate.com/docs/tutorials/aws/",
 						"user_id":        "AIDAZAVB57H5V3Q4ACRGM",
 					},

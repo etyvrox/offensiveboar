@@ -10,16 +10,16 @@ import (
 	"sync"
 	"time"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/common"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/context"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/feature"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/giturl"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/log"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/source_metadatapb"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/sourcespb"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sanitizer"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sources"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sources/git"
+	"github.com/etyvrox/offensiveboar/v3/pkg/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/feature"
+	"github.com/etyvrox/offensiveboar/v3/pkg/giturl"
+	"github.com/etyvrox/offensiveboar/v3/pkg/log"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/source_metadatapb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/sourcespb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sanitizer"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sources"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sources/git"
 
 	gogit "github.com/go-git/go-git/v5"
 	"github.com/gobwas/glob"
@@ -975,7 +975,7 @@ func (s *Source) scanRepos(ctx context.Context, chunksChan chan *sources.Chunk) 
 			// remove the path only if it was created as a temporary path, or if it is a clone path and --no-cleanup is not set.
 			// if legacy JSON is enabled, don't remove the directory because we need it for outputting legacy JSON.
 			if !s.printLegacyJSON {
-				if strings.HasPrefix(path, filepath.Join(os.TempDir(), "trufflehog")) || (!s.noCleanup && s.clonePath != "") {
+				if strings.HasPrefix(path, filepath.Join(os.TempDir(), "offensiveboar")) || (!s.noCleanup && s.clonePath != "") {
 					defer os.RemoveAll(path)
 				}
 			}
@@ -1178,7 +1178,7 @@ func (s *Source) ChunkUnit(ctx context.Context, unit sources.SourceUnit, reporte
 	// remove the path only if it was created as a temporary path, or if it is a clone path and --no-cleanup is not set.
 	// if legacy JSON is enabled, don't remove the directory because we need it for outputting legacy JSON.
 	if !s.printLegacyJSON {
-		if strings.HasPrefix(path, filepath.Join(os.TempDir(), "trufflehog")) || (!s.noCleanup && s.clonePath != "") {
+		if strings.HasPrefix(path, filepath.Join(os.TempDir(), "offensiveboar")) || (!s.noCleanup && s.clonePath != "") {
 			defer os.RemoveAll(path)
 		}
 	}

@@ -6,10 +6,10 @@ import (
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/context"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/sourcespb"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sources"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sources/elasticsearch"
+	"github.com/etyvrox/offensiveboar/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/sourcespb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sources"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sources/elasticsearch"
 )
 
 // ScanElasticsearch scans a Elasticsearch installation.
@@ -34,7 +34,7 @@ func (e *Engine) ScanElasticsearch(ctx context.Context, c sources.ElasticsearchC
 		return sources.JobProgressRef{}, err
 	}
 
-	sourceName := "trufflehog - Elasticsearch"
+	sourceName := "offensiveboar - Elasticsearch"
 	sourceID, jobID, _ := e.sourceManager.GetIDs(ctx, sourceName, elasticsearch.SourceType)
 
 	elasticsearchSource := &elasticsearch.Source{}

@@ -9,7 +9,7 @@ import (
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/tui/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/tui/common"
 )
 
 // Item represents a single item in the selector.

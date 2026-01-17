@@ -6,18 +6,18 @@ import (
 
 	gh "github.com/google/go-github/v67/github"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/analyzer/analyzers"
-	analyzerCommon "github.com/trufflesecurity/trufflehog/v3/pkg/analyzer/analyzers/github/common"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/analyzer/config"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/common"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/analyzer/analyzers"
+	analyzerCommon "github.com/etyvrox/offensiveboar/v3/pkg/analyzer/analyzers/github/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/analyzer/config"
+	"github.com/etyvrox/offensiveboar/v3/pkg/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/context"
 )
 
 func TestAnalyzer_Analyze(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
 	defer cancel()
 
-	analyzerSecrets, err := common.GetSecret(ctx, "trufflehog-testing", "analyzers1")
+	analyzerSecrets, err := common.GetSecret(ctx, "offensiveboar-testing", "analyzers1")
 	if err != nil {
 		t.Fatalf("could not get test secrets from GCP: %s", err)
 	}

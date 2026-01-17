@@ -9,9 +9,9 @@ import (
 	"github.com/kylelemons/godebug/pretty"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	logContext "github.com/trufflesecurity/trufflehog/v3/pkg/context"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/engine/ahocorasick"
+	logContext "github.com/etyvrox/offensiveboar/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/detectors"
+	"github.com/etyvrox/offensiveboar/v3/pkg/engine/ahocorasick"
 )
 
 func TestJdbc_Pattern(t *testing.T) {
@@ -23,7 +23,7 @@ func TestJdbc_Pattern(t *testing.T) {
 		want  []string
 	}{
 		{
-			// examples from: https://github.com/trufflesecurity/trufflehog/issues/3704
+			// examples from: https://github.com/trufflesecurity/offensiveboar/issues/3704
 			name: "valid patterns",
 			input: `
 				<?xml version="1.0" encoding="UTF-8"?>

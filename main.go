@@ -23,30 +23,31 @@ import (
 	"github.com/mattn/go-isatty"
 	"go.uber.org/automaxprocs/maxprocs"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/analyzer"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/cache/simple"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/cleantemp"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/common"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/config"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/context"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/engine"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/engine/defaults"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/feature"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/handlers"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/log"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/output"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sources"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/tui"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/updater"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/verificationcache"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/version"
+	"github.com/etyvrox/offensiveboar/v3/pkg/analyzer"
+	"github.com/etyvrox/offensiveboar/v3/pkg/cache/simple"
+	"github.com/etyvrox/offensiveboar/v3/pkg/cleantemp"
+	"github.com/etyvrox/offensiveboar/v3/pkg/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/config"
+	"github.com/etyvrox/offensiveboar/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/detectors"
+	"github.com/etyvrox/offensiveboar/v3/pkg/detectors/custom"
+	"github.com/etyvrox/offensiveboar/v3/pkg/engine"
+	"github.com/etyvrox/offensiveboar/v3/pkg/engine/defaults"
+	"github.com/etyvrox/offensiveboar/v3/pkg/feature"
+	"github.com/etyvrox/offensiveboar/v3/pkg/handlers"
+	"github.com/etyvrox/offensiveboar/v3/pkg/log"
+	"github.com/etyvrox/offensiveboar/v3/pkg/output"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sources"
+	"github.com/etyvrox/offensiveboar/v3/pkg/tui"
+	"github.com/etyvrox/offensiveboar/v3/pkg/updater"
+	"github.com/etyvrox/offensiveboar/v3/pkg/verificationcache"
+	"github.com/etyvrox/offensiveboar/v3/pkg/version"
 )
 
 var (
-	cli = kingpin.New("TruffleHog", "TruffleHog is a tool for finding credentials.")
+	cli = kingpin.New("OffensiveBoar", "OffensiveBoar is a tool for finding credentials.")
 	cmd string
-	// https://github.com/trufflesecurity/trufflehog/blob/main/CONTRIBUTING.md#logging-in-trufflehog
+	// https://github.com/etyvrox/offensiveboar/blob/main/CONTRIBUTING.md#logging-in-offensiveboar
 	logLevel            = cli.Flag("log-level", `Logging verbosity on a scale of 0 (info) to 5 (trace). Can be disabled with "-1".`).Default("0").Int()
 	debug               = cli.Flag("debug", "Run in debug mode.").Hidden().Bool()
 	trace               = cli.Flag("trace", "Run in trace mode.").Hidden().Bool()
@@ -91,6 +92,7 @@ var (
 	gitCloneTimeout    = cli.Flag("git-clone-timeout", "Maximum time to spend cloning a repository, as a duration.").Hidden().Duration()
 	skipAdditionalRefs = cli.Flag("skip-additional-refs", "Skip additional references.").Bool()
 	userAgentSuffix    = cli.Flag("user-agent-suffix", "Suffix to add to User-Agent.").String()
+	customLanguages    = cli.Flag("custom-languages", "Comma-separated list of language codes for custom detector password patterns (e.g., en,ru,es,fr,de,it,pt,ja,zh,ko). Defaults to 'en' if not specified.").String()
 
 	gitScan                = cli.Command("git", "Find credentials in git repositories.")
 	gitScanURI             = gitScan.Arg("uri", "Git repository URL. https://, file://, or ssh:// schema expected.").Required().String()
@@ -115,7 +117,7 @@ var (
 	githubScanToken             = githubScan.Flag("token", "GitHub token. Can be provided with environment variable GITHUB_TOKEN.").Envar("GITHUB_TOKEN").String()
 	githubIncludeForks          = githubScan.Flag("include-forks", "Include forks in scan.").Bool()
 	githubIncludeMembers        = githubScan.Flag("include-members", "Include organization member repositories in scan.").Bool()
-	githubIncludeRepos          = githubScan.Flag("include-repos", `Repositories to include in an org scan. This can also be a glob pattern. You can repeat this flag. Must use Github repo full name. Example: "trufflesecurity/trufflehog", "trufflesecurity/t*"`).Strings()
+	githubIncludeRepos          = githubScan.Flag("include-repos", `Repositories to include in an org scan. This can also be a glob pattern. You can repeat this flag. Must use Github repo full name. Example: "trufflesecurity/offensiveboar", "trufflesecurity/t*"`).Strings()
 	githubIncludeWikis          = githubScan.Flag("include-wikis", "Include repository wikisin scan.").Bool()
 	githubExcludeRepos          = githubScan.Flag("exclude-repos", `Repositories to exclude in an org scan. This can also be a glob pattern. You can repeat this flag. Must use Github repo full name. Example: "trufflesecurity/driftwood", "trufflesecurity/d*"`).Strings()
 	githubScanIncludePaths      = githubScan.Flag("include-paths", "Path to file with newline separated regexes for files to include in scan.").Short('i').String()
@@ -147,7 +149,7 @@ var (
 	gitlabScanGroupIds     = gitlabScan.Flag("group-id", "GitLab group ID. If provided, it will scan the group and its subgroups. You can repeat this flag.").Strings()
 	gitlabScanIncludePaths = gitlabScan.Flag("include-paths", "Path to file with newline separated regexes for files to include in scan.").Short('i').String()
 	gitlabScanExcludePaths = gitlabScan.Flag("exclude-paths", "Path to file with newline separated regexes for files to exclude in scan.").Short('x').String()
-	gitlabScanIncludeRepos = gitlabScan.Flag("include-repos", `Repositories to include in an org scan. This can also be a glob pattern. You can repeat this flag. Must use Gitlab repo full name. Example: "trufflesecurity/trufflehog", "trufflesecurity/t*"`).Strings()
+	gitlabScanIncludeRepos = gitlabScan.Flag("include-repos", `Repositories to include in an org scan. This can also be a glob pattern. You can repeat this flag. Must use Gitlab repo full name. Example: "trufflesecurity/offensiveboar", "trufflesecurity/t*"`).Strings()
 	gitlabScanExcludeRepos = gitlabScan.Flag("exclude-repos", `Repositories to exclude in an org scan. This can also be a glob pattern. You can repeat this flag. Must use Gitlab repo full name. Example: "trufflesecurity/driftwood", "trufflesecurity/d*"`).Strings()
 	gitlabAuthInUrl        = gitlabScan.Flag("auth-in-url", "Embed authentication credentials in repository URLs instead of using secure HTTP headers").Bool()
 	gitlabClonePath        = gitlabScan.Flag("clone-path", "Custom path where the repository should be cloned (default: temp dir)").String()
@@ -161,6 +163,10 @@ var (
 	// filesystemScanRecursive = filesystemScan.Flag("recursive", "Scan recursively.").Short('r').Bool()
 	filesystemScanIncludePaths = filesystemScan.Flag("include-paths", "Path to file with newline separated regexes for files to include in scan.").Short('i').String()
 	filesystemScanExcludePaths = filesystemScan.Flag("exclude-paths", "Path to file with newline separated regexes for files to exclude in scan.").Short('x').String()
+
+	jiraScan     = cli.Command("jira", "Find credentials in Jira issues.")
+	jiraURL      = jiraScan.Flag("jira-url", "Jira instance URL (e.g., https://jira.example.com).").Required().String()
+	jiraToken    = jiraScan.Flag("jira-token", "Jira API token for authentication (Bearer token).").Required().String()
 
 	s3Scan              = cli.Command("s3", "Find credentials in S3 buckets.")
 	s3ScanKey           = s3Scan.Flag("key", "S3 key used to authenticate. Can be provided with environment variable AWS_ACCESS_KEY_ID.").Envar("AWS_ACCESS_KEY_ID").String()
@@ -286,7 +292,7 @@ func init() {
 		}
 	}
 
-	cli.Version("trufflehog " + version.BuildVersion)
+	cli.Version("offensiveboar " + version.BuildVersion)
 
 	// Support -h for help and write it to stdout.
 	cli.HelpFlag.Short('h')
@@ -353,7 +359,7 @@ func main() {
 	if *jsonOut {
 		logFormat = log.WithJSONSink
 	}
-	logger, sync := log.New("trufflehog", logFormat(os.Stderr, log.WithGlobalRedaction()))
+	logger, sync := log.New("offensiveboar", logFormat(os.Stderr, log.WithGlobalRedaction()))
 	// make it the default logger for contexts
 	context.SetDefaultLogger(logger)
 
@@ -383,7 +389,7 @@ func main() {
 
 	err := overseer.RunErr(updateCfg)
 	if err != nil {
-		logFatal(err, "error occurred with trufflehog updater 🐷")
+		logFatal(err, "error occurred with offensiveboar updater 🐷")
 	}
 }
 
@@ -416,7 +422,7 @@ func run(state overseer.State) {
 		os.Exit(0)
 	}()
 
-	logger.V(2).Info(fmt.Sprintf("trufflehog %s", version.BuildVersion))
+	logger.V(2).Info(fmt.Sprintf("offensiveboar %s", version.BuildVersion))
 
 	if *githubScanToken != "" {
 		// NOTE: this kludge is here to do an authenticated shallow commit
@@ -515,7 +521,7 @@ func run(state overseer.State) {
 	}
 
 	if !*jsonLegacy && !*jsonOut {
-		fmt.Fprintf(os.Stderr, "🐷🔑🐷  TruffleHog. Unearth your secrets. 🐷🔑🐷\n\n")
+		fmt.Fprintf(os.Stderr, "🐷🔑🐷  OffensiveBoar. Unearth your secrets. 🐷🔑🐷\n\n")
 	}
 
 	// Parse --results flag.
@@ -530,6 +536,24 @@ func run(state overseer.State) {
 
 	verificationCacheMetrics := verificationcache.InMemoryMetrics{}
 
+	detectorList := append(defaults.DefaultDetectors(), conf.Detectors...)
+	
+	// Configure custom detector with languages if provided
+	if *customLanguages != "" {
+		languages := strings.Split(*customLanguages, ",")
+		for _, d := range detectorList {
+			if customDetector, ok := d.(*custom.Scanner); ok {
+				customDetector.SetLanguages(languages)
+			}
+		}
+		// Also check in conf.Detectors in case it was added there
+		for _, d := range conf.Detectors {
+			if customDetector, ok := d.(*custom.Scanner); ok {
+				customDetector.SetLanguages(languages)
+			}
+		}
+	}
+
 	engConf := engine.Config{
 		Concurrency:       *concurrency,
 		ConfiguredSources: conf.Sources,
@@ -537,7 +561,7 @@ func run(state overseer.State) {
 		// default detectors, which can be further filtered by the
 		// user. The filters are applied by the engine and are only
 		// subtractive.
-		Detectors:                append(defaults.DefaultDetectors(), conf.Detectors...),
+		Detectors:                detectorList,
 		Verify:                   !*noVerification,
 		IncludeDetectors:         *includeDetectors,
 		ExcludeDetectors:         *excludeDetectors,
@@ -600,7 +624,7 @@ func run(state overseer.State) {
 		"verified_secrets", metrics.VerifiedSecretsFound,
 		"unverified_secrets", metrics.UnverifiedSecretsFound,
 		"scan_duration", metrics.ScanDuration.String(),
-		"trufflehog_version", version.BuildVersion,
+		"offensiveboar_version", version.BuildVersion,
 		"verification_caching", verificationCacheMetricsSnapshot,
 	)
 
@@ -879,6 +903,16 @@ func runSingleScan(ctx context.Context, cmd string, cfg engine.Config) (metrics,
 		} else {
 			refs = []sources.JobProgressRef{ref}
 		}
+	case jiraScan.FullCommand():
+		cfg := sources.JiraConfig{
+			URL:   *jiraURL,
+			Token: *jiraToken,
+		}
+		if ref, err := eng.ScanJira(ctx, cfg); err != nil {
+			return scanMetrics, fmt.Errorf("failed to scan Jira: %v", err)
+		} else {
+			refs = []sources.JobProgressRef{ref}
+		}
 	case s3Scan.FullCommand():
 		cfg := sources.S3Config{
 			Key:           *s3ScanKey,
@@ -1124,7 +1158,7 @@ func runSingleScan(ctx context.Context, cmd string, cfg engine.Config) (metrics,
 // parseResults ensures that users provide valid CSV input to `--results`.
 //
 // This is a work-around to kingpin not supporting CSVs.
-// See: https://github.com/trufflesecurity/trufflehog/pull/2372#issuecomment-1983868917
+// See: https://github.com/etyvrox/offensiveboar/pull/2372#issuecomment-1983868917
 func parseResults(input *string) (map[string]struct{}, error) {
 	if *input == "" {
 		return nil, nil

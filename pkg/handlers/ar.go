@@ -8,8 +8,8 @@ import (
 
 	"pault.ag/go/debian/deb"
 
-	logContext "github.com/trufflesecurity/trufflehog/v3/pkg/context"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/feature"
+	logContext "github.com/etyvrox/offensiveboar/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/feature"
 )
 
 // arHandler handles AR archive formats.

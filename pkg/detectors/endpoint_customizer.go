@@ -3,7 +3,7 @@ package detectors
 import (
 	"fmt"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/common"
 )
 
 // EndpointSetter implements a sensible default for the SetEndpoints function

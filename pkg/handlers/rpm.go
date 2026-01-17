@@ -8,8 +8,8 @@ import (
 
 	"github.com/sassoftware/go-rpmutils"
 
-	logContext "github.com/trufflesecurity/trufflehog/v3/pkg/context"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/feature"
+	logContext "github.com/etyvrox/offensiveboar/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/feature"
 )
 
 // rpmHandler specializes archiveHandler to manage RPM package files.

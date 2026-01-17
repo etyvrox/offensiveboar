@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	dpb "github.com/trufflesecurity/trufflehog/v3/pkg/pb/detectorspb"
+	dpb "github.com/etyvrox/offensiveboar/v3/pkg/pb/detectorspb"
 )
 
 func TestDetectorParsing(t *testing.T) {

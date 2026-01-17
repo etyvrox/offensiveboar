@@ -9,10 +9,10 @@ import (
 
 	"github.com/shurcooL/githubv4"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/context"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/source_metadatapb"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sanitizer"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sources"
+	"github.com/etyvrox/offensiveboar/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/source_metadatapb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sanitizer"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sources"
 )
 
 // processIssuesWithComments process github repo issues with comments using graphql API

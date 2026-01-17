@@ -11,9 +11,9 @@ import (
 	"github.com/marusama/semaphore/v2"
 	"golang.org/x/sync/errgroup"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/common"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/context"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/sourcespb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/sourcespb"
 )
 
 // SourceManager provides an interface for starting and managing running

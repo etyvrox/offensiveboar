@@ -8,9 +8,9 @@ import (
 
 	"github.com/mholt/archives"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/common"
-	logContext "github.com/trufflesecurity/trufflehog/v3/pkg/context"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/feature"
+	"github.com/etyvrox/offensiveboar/v3/pkg/common"
+	logContext "github.com/etyvrox/offensiveboar/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/feature"
 )
 
 type ctxKey int
@@ -22,7 +22,7 @@ const (
 
 var (
 	// NOTE: This is a temporary workaround for |openArchive| incrementing depth twice per archive.
-	// See: https://github.com/trufflesecurity/trufflehog/issues/2942
+	// See: https://github.com/trufflesecurity/offensiveboar/issues/2942
 	maxDepth   = 5 * 2
 	maxSize    = 2 << 30 // 2 GB
 	maxTimeout = time.Duration(60) * time.Second

@@ -3,8 +3,8 @@ package gcs
 import (
 	"strings"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/tui/common"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/tui/components/textinputs"
+	"github.com/etyvrox/offensiveboar/v3/pkg/tui/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/tui/components/textinputs"
 )
 
 type gcsCmdModel struct {
@@ -16,7 +16,7 @@ func GetFields() gcsCmdModel {
 		Label:       "Project ID",
 		Key:         "project-id",
 		Required:    true,
-		Placeholder: "trufflehog-testing",
+		Placeholder: "offensiveboar-testing",
 	}
 
 	return gcsCmdModel{textinputs.New([]textinputs.InputConfig{projectId})}
@@ -24,7 +24,7 @@ func GetFields() gcsCmdModel {
 
 func (m gcsCmdModel) Cmd() string {
 	var command []string
-	command = append(command, "trufflehog", "gcs")
+	command = append(command, "offensiveboar", "gcs")
 
 	inputs := m.GetInputs()
 

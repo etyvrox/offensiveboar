@@ -11,7 +11,7 @@ import (
 	"github.com/fatih/color"
 	"github.com/jedib0t/go-pretty/v6/table"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/analyzer/analyzers"
+	"github.com/etyvrox/offensiveboar/v3/pkg/analyzer/analyzers"
 )
 
 func CallAirtableAPI(token string, method string, url string) (*http.Response, error) {

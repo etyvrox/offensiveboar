@@ -4,7 +4,7 @@ import (
 	"strings"
 
 	"github.com/muesli/reflow/truncate"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/tui/components/textinputs"
+	"github.com/etyvrox/offensiveboar/v3/pkg/tui/components/textinputs"
 )
 
 // TruncateString is a convenient wrapper around truncate.TruncateString.

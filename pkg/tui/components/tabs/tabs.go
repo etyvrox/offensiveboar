@@ -5,7 +5,7 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/tui/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/tui/common"
 )
 
 // SelectTabMsg is a message that contains the index of the tab to select.

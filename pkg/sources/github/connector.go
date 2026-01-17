@@ -10,9 +10,9 @@ import (
 	"github.com/google/go-github/v67/github"
 	"github.com/shurcooL/githubv4"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/context"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/log"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/sourcespb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/log"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/sourcespb"
 )
 
 const (

@@ -6,9 +6,9 @@ import (
 	"github.com/charmbracelet/bubbles/key"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/tui/common"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/tui/components/selector"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/tui/styles"
+	"github.com/etyvrox/offensiveboar/v3/pkg/tui/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/tui/components/selector"
+	"github.com/etyvrox/offensiveboar/v3/pkg/tui/styles"
 )
 
 const (
@@ -34,7 +34,7 @@ func (w Item) String() string {
 	case ViewOSSProject:
 		return "View open-source project"
 	case EnterpriseInquire:
-		return "Inquire about TruffleHog Enterprise"
+		return "Inquire about OffensiveBoar Enterprise"
 	case Quit:
 		return "Quit"
 	}

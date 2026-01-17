@@ -22,14 +22,14 @@ import (
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/common"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/context"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/handlers"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/log"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/source_metadatapb"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/sourcespb"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sanitizer"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sources"
+	"github.com/etyvrox/offensiveboar/v3/pkg/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/handlers"
+	"github.com/etyvrox/offensiveboar/v3/pkg/log"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/source_metadatapb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/sourcespb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sanitizer"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sources"
 )
 
 const (
@@ -163,7 +163,7 @@ func (s *Source) newClient(ctx context.Context, region, roleArn string) (*s3.Cli
 
 		stsClient := sts.NewFromConfig(cfg)
 		provider := stscreds.NewAssumeRoleProvider(stsClient, roleArn, func(options *stscreds.AssumeRoleOptions) {
-			options.RoleSessionName = "trufflehog"
+			options.RoleSessionName = "offensiveboar"
 		})
 		// From https://docs.aws.amazon.com/sdk-for-go/v2/developer-guide/configure-gosdk.html#specify-credentials-programmatically:
 		//   "If you explicitly configure a provider on aws.Config directly,

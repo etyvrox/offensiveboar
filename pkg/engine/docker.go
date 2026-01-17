@@ -6,10 +6,10 @@ import (
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/context"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/sourcespb"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sources"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sources/docker"
+	"github.com/etyvrox/offensiveboar/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/sourcespb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sources"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sources/docker"
 )
 
 // ScanDocker scans a given docker connection.
@@ -37,7 +37,7 @@ func (e *Engine) ScanDocker(ctx context.Context, c sources.DockerConfig) (source
 		return sources.JobProgressRef{}, err
 	}
 
-	sourceName := "trufflehog - docker"
+	sourceName := "offensiveboar - docker"
 	sourceID, jobID, _ := e.sourceManager.GetIDs(ctx, sourceName, docker.SourceType)
 
 	dockerSource := &docker.Source{}

@@ -3,8 +3,8 @@ package jenkins
 import (
 	"strings"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/tui/common"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/tui/components/textinputs"
+	"github.com/etyvrox/offensiveboar/v3/pkg/tui/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/tui/components/textinputs"
 )
 
 type jenkinsCmdModel struct {
@@ -12,7 +12,7 @@ type jenkinsCmdModel struct {
 }
 
 func GetNote() string {
-	return "If no username and password are provided, TruffleHog will attempt an unauthenticated Jenkins scan."
+	return "If no username and password are provided, OffensiveBoar will attempt an unauthenticated Jenkins scan."
 }
 
 func GetFields() jenkinsCmdModel {
@@ -47,7 +47,7 @@ func checkIsAuthenticated(inputs map[string]textinputs.Input) bool {
 
 func (m jenkinsCmdModel) Cmd() string {
 	var command []string
-	command = append(command, "trufflehog", "jenkins")
+	command = append(command, "offensiveboar", "jenkins")
 	inputs := m.GetInputs()
 
 	keys := []string{"url"}

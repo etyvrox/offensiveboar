@@ -3,8 +3,8 @@ package gitlab
 import (
 	"strings"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/tui/common"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/tui/components/textinputs"
+	"github.com/etyvrox/offensiveboar/v3/pkg/tui/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/tui/components/textinputs"
 )
 
 type gitlabCmdModel struct {
@@ -25,7 +25,7 @@ func GetFields() gitlabCmdModel {
 
 func (m gitlabCmdModel) Cmd() string {
 	var command []string
-	command = append(command, "trufflehog", "gitlab")
+	command = append(command, "offensiveboar", "gitlab")
 
 	inputs := m.GetInputs()
 

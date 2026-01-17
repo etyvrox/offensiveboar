@@ -8,9 +8,9 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/common"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/detectorspb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/detectors"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/detectorspb"
 )
 
 type Scanner struct {
@@ -69,7 +69,7 @@ func (s Scanner) FromData(ctx context.Context, verify bool, data []byte) (result
 
 // Eliminate the most common false positive.
 func isCommonFalsePositive(line string) bool {
-	// TODO: Skip lock files altogether. (https://github.com/trufflesecurity/trufflehog/issues/1517)
+	// TODO: Skip lock files altogether. (https://github.com/trufflesecurity/offensiveboar/issues/1517)
 	if strings.Contains(line, "helper-explode-assignable-expression") {
 		return true
 	}

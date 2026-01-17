@@ -16,9 +16,9 @@ import (
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/lib/pq"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors"
+	"github.com/etyvrox/offensiveboar/v3/pkg/detectors"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/detectorspb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/detectorspb"
 )
 
 var postgresDockerHash string

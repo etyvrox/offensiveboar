@@ -11,9 +11,9 @@ import (
 
 	regexp "github.com/wasilibs/go-re2"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/common"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/detectorspb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/detectors"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/detectorspb"
 )
 
 type Scanner struct {
@@ -112,7 +112,7 @@ func (s Scanner) FromData(ctx context.Context, verify bool, data []byte) (result
 func verifySquareApp(ctx context.Context, client *http.Client, endpoint, id, secret string) (bool, error) {
 	reqData, err := json.Marshal(map[string]string{
 		"client_id":    id,
-		"access_token": "fakeTruffleHogAccessTokenForVerification",
+		"access_token": "fakeOffensiveBoarAccessTokenForVerification",
 	})
 	if err != nil {
 		return false, err

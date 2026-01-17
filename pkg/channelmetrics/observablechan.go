@@ -6,8 +6,8 @@ package channelmetrics
 import (
 	"time"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/common"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/context"
 )
 
 // MetricsCollector is an interface for collecting metrics. Implementations

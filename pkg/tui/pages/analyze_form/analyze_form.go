@@ -7,11 +7,11 @@ import (
 	"github.com/charmbracelet/bubbles/key"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/analyzer"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/analyzer/config"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/tui/common"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/tui/components/textinputs"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/tui/styles"
+	"github.com/etyvrox/offensiveboar/v3/pkg/analyzer"
+	"github.com/etyvrox/offensiveboar/v3/pkg/analyzer/config"
+	"github.com/etyvrox/offensiveboar/v3/pkg/tui/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/tui/components/textinputs"
+	"github.com/etyvrox/offensiveboar/v3/pkg/tui/styles"
 )
 
 var (
@@ -162,8 +162,8 @@ func New(c common.Common, keyType string) *AnalyzeForm {
 
 	form := textinputs.New(inputs).
 		SetHeader(titleStyle.Render(fmt.Sprintf("Configuring %s analyzer", keyType))).
-		SetFooter("⚠️  Running TruffleHog Analyze will send a lot of requests ⚠️\n\n🚧 Please confirm you have permission to run TruffleHog Analyze against this secret 🚧").
-		SetSubmitMsg("Run TruffleHog Analyze")
+		SetFooter("⚠️  Running OffensiveBoar Analyze will send a lot of requests ⚠️\n\n🚧 Please confirm you have permission to run OffensiveBoar Analyze against this secret 🚧").
+		SetSubmitMsg("Run OffensiveBoar Analyze")
 	return &AnalyzeForm{
 		Common:  c,
 		KeyType: keyType,

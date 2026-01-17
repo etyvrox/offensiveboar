@@ -3,8 +3,8 @@ package docker
 import (
 	"strings"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/tui/common"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/tui/components/textinputs"
+	"github.com/etyvrox/offensiveboar/v3/pkg/tui/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/tui/components/textinputs"
 )
 
 type dockerCmdModel struct {
@@ -26,7 +26,7 @@ func GetFields() dockerCmdModel {
 func (m dockerCmdModel) Cmd() string {
 
 	var command []string
-	command = append(command, "trufflehog", "docker")
+	command = append(command, "offensiveboar", "docker")
 
 	inputs := m.GetInputs()
 	vals := inputs["images"].Value

@@ -9,9 +9,9 @@ import (
 	regexp "github.com/wasilibs/go-re2"
 	"golang.org/x/sync/singleflight"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/cache/simple"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/context"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors"
+	"github.com/etyvrox/offensiveboar/v3/pkg/cache/simple"
+	"github.com/etyvrox/offensiveboar/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/detectors"
 )
 
 const uuidStr = `[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}`

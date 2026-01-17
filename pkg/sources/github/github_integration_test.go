@@ -14,14 +14,14 @@ import (
 	"github.com/stretchr/testify/require"
 	"google.golang.org/protobuf/types/known/anypb"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/cache/simple"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/common"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/context"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/feature"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/credentialspb"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/source_metadatapb"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/sourcespb"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sources"
+	"github.com/etyvrox/offensiveboar/v3/pkg/cache/simple"
+	"github.com/etyvrox/offensiveboar/v3/pkg/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/feature"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/credentialspb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/source_metadatapb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/sourcespb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sources"
 )
 
 func TestSource_Token(t *testing.T) {
@@ -244,7 +244,7 @@ func TestSource_ScanChunks(t *testing.T) {
 				connection: &sourcespb.GitHub{
 					Repositories: []string{
 						"https://github.com/truffle-test-integration-org/another-test-repo.git",
-						"https://github.com/trufflesecurity/trufflehog.git",
+						"https://github.com/trufflesecurity/offensiveboar.git",
 						"https://github.com/Akash-goyal-github/Inventory-Management-System.git",
 						"https://github.com/R1ck404/Crypto-Exchange-Example.git",
 						"https://github.com/Stability-AI/generative-models.git",
@@ -748,8 +748,8 @@ func TestSource_Chunks_TargetedScan(t *testing.T) {
 				queryCriteria: &source_metadatapb.MetaData{
 					Data: &source_metadatapb.MetaData_Github{
 						Github: &source_metadatapb.Github{
-							Repository: "https://github.com/trufflesecurity/trufflehog.git",
-							Link:       "https://github.com/trufflesecurity/trufflehog/blob/33eed42e17fda8b1a66feaeafcd57efccff26c11/pkg/sources/s3/s3_test.go#L78",
+							Repository: "https://github.com/trufflesecurity/offensiveboar.git",
+							Link:       "https://github.com/trufflesecurity/offensiveboar/blob/33eed42e17fda8b1a66feaeafcd57efccff26c11/pkg/sources/s3/s3_test.go#L78",
 							Commit:     "33eed42e17fda8b1a66feaeafcd57efccff26c11",
 							File:       "pkg/sources/s3/s3_test.go",
 						},
@@ -784,8 +784,8 @@ func TestSource_Chunks_TargetedScan(t *testing.T) {
 				queryCriteria: &source_metadatapb.MetaData{
 					Data: &source_metadatapb.MetaData_Github{
 						Github: &source_metadatapb.Github{
-							Repository: "https://github.com/trufflesecurity/trufflehog.git",
-							Link:       "https://github.com/trufflesecurity/trufflehog/commit/1c51106e35c3b3c327fe12e358177c03079bb771",
+							Repository: "https://github.com/trufflesecurity/offensiveboar.git",
+							Link:       "https://github.com/trufflesecurity/offensiveboar/commit/1c51106e35c3b3c327fe12e358177c03079bb771",
 							Commit:     "1c51106e35c3b3c327fe12e358177c03079bb771",
 							File:       "", // no file
 						},

@@ -11,10 +11,10 @@ import (
 
 	regexp "github.com/wasilibs/go-re2"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/cache/simple"
-	logContext "github.com/trufflesecurity/trufflehog/v3/pkg/context"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/detectorspb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/cache/simple"
+	logContext "github.com/etyvrox/offensiveboar/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/detectors"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/detectorspb"
 )
 
 type Scanner struct {
@@ -143,7 +143,7 @@ func verifyUrlPassword(_ context.Context, repoUrl, user, password string) (bool,
 	}
 	parsedURL.Scheme = "https" // Force HTTPS
 
-	fakeRef := "TRUFFLEHOG_CHECK_GIT_REMOTE_URL_REACHABILITY"
+	fakeRef := "OFFENSIVEBOAR_CHECK_GIT_REMOTE_URL_REACHABILITY"
 	gitArgs := []string{"ls-remote", parsedURL.String(), "--quiet", fakeRef}
 	cmd := exec.Command("git", gitArgs...)
 	output, err := cmd.CombinedOutput()

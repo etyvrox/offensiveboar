@@ -17,9 +17,9 @@ import (
 	"github.com/avast/apkparser"
 	dextk "github.com/csnewman/dextk"
 
-	logContext "github.com/trufflesecurity/trufflehog/v3/pkg/context"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/engine/defaults"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/iobuf"
+	logContext "github.com/etyvrox/offensiveboar/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/engine/defaults"
+	"github.com/etyvrox/offensiveboar/v3/pkg/iobuf"
 )
 
 // General Note: There are tools that can fully decompile an apk (e.g. jadx, apktool, etc.)

@@ -3,8 +3,8 @@ package filesystem
 import (
 	"strings"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/tui/common"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/tui/components/textinputs"
+	"github.com/etyvrox/offensiveboar/v3/pkg/tui/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/tui/components/textinputs"
 )
 
 type fsModel struct {
@@ -25,7 +25,7 @@ func GetFields() fsModel {
 
 func (m fsModel) Cmd() string {
 	var command []string
-	command = append(command, "trufflehog", "filesystem")
+	command = append(command, "offensiveboar", "filesystem")
 
 	inputs := m.GetInputs()
 	command = append(command, inputs["path"].Value)

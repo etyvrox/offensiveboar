@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/tui/components/textinputs"
+	"github.com/etyvrox/offensiveboar/v3/pkg/tui/components/textinputs"
 )
 
 type truffleCmdModel struct {

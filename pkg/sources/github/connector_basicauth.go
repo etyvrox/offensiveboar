@@ -7,10 +7,10 @@ import (
 	"github.com/google/go-github/v67/github"
 	"github.com/shurcooL/githubv4"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/common"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/context"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/credentialspb"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sources/git"
+	"github.com/etyvrox/offensiveboar/v3/pkg/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/credentialspb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sources/git"
 )
 
 type basicAuthConnector struct {

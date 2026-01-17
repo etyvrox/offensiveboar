@@ -15,8 +15,8 @@ import (
 
 	regexp "github.com/wasilibs/go-re2"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/detectorspb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/detectors"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/detectorspb"
 )
 
 type Scanner struct{}
@@ -97,7 +97,7 @@ func (s Scanner) FromData(ctx context.Context, verify bool, data []byte) (result
 		switch parsedToken.Method.Alg() {
 		case "HS256", "HS384", "HS512":
 			// The JWT *might* be valid, but we can't in general do signature verification on HMAC-based algorithms.
-			// We don't have a suitable status to represent this situation in trufflehog.
+			// We don't have a suitable status to represent this situation in offensiveboar.
 			// (The `unknown` status is intended to indicate that an error occurred to to external environment conditions, like trannsient network errors.)
 			// So instead, to avoid possible false positives, totally skip HMAC-based JWTs; don't even create results for them.
 			continue

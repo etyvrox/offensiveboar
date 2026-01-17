@@ -5,7 +5,7 @@ import (
 
 	"github.com/kylelemons/godebug/pretty"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sources"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sources"
 )
 
 func TestUnicodeEscape_FromChunk(t *testing.T) {

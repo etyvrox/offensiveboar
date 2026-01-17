@@ -56,9 +56,9 @@ do
   # Run each iteration 5 times and calculate the average user time
   for i in {1..$num_iterations}
   do
-    # Run trufflehog with suppressed output and capture user time with /usr/bin/time
+    # Run offensiveboar with suppressed output and capture user time with /usr/bin/time
     tmpfile=$(mktemp)
-    /usr/bin/time -o $tmpfile trufflehog git "file://$repo_tmp" --no-verification --no-update >/dev/null 2>&1
+    /usr/bin/time -o $tmpfile offensiveboar git "file://$repo_tmp" --no-verification --no-update >/dev/null 2>&1
     time_output=$(cat $tmpfile)
     rm $tmpfile
 

@@ -8,7 +8,7 @@ package sourcespb
 
 import (
 	_ "github.com/envoyproxy/protoc-gen-validate/validate"
-	credentialspb "github.com/trufflesecurity/trufflehog/v3/pkg/pb/credentialspb"
+	credentialspb "github.com/etyvrox/offensiveboar/v3/pkg/pb/credentialspb"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	anypb "google.golang.org/protobuf/types/known/anypb"
@@ -699,7 +699,7 @@ type Bitbucket struct {
 	OauthAuthorizationEndpoint string                    `protobuf:"bytes,10,opt,name=oauth_authorization_endpoint,json=oauthAuthorizationEndpoint,proto3" json:"oauth_authorization_endpoint,omitempty"` // endpoint for OAuth authorization flow in Bitbucket Data Center application links
 	OauthTokenEndpoint         string                    `protobuf:"bytes,11,opt,name=oauth_token_endpoint,json=oauthTokenEndpoint,proto3" json:"oauth_token_endpoint,omitempty"`                         // endpoint for getting OAuth access/refresh tokens in Bitbucket Data Center application links
 	OauthScopes                []string                  `protobuf:"bytes,12,rep,name=oauth_scopes,json=oauthScopes,proto3" json:"oauth_scopes,omitempty"`                                                // list of OAuth scopes that the access token is provided
-	AllowSecretsManagerWrite   bool                      `protobuf:"varint,13,opt,name=allow_secrets_manager_write,json=allowSecretsManagerWrite,proto3" json:"allow_secrets_manager_write,omitempty"`    // flag to explicitly allow TruffleHog to write to the user's secrets manager
+	AllowSecretsManagerWrite   bool                      `protobuf:"varint,13,opt,name=allow_secrets_manager_write,json=allowSecretsManagerWrite,proto3" json:"allow_secrets_manager_write,omitempty"`    // flag to explicitly allow OffensiveBoar to write to the user's secrets manager
 }
 
 func (x *Bitbucket) Reset() {

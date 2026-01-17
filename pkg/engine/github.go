@@ -5,11 +5,11 @@ import (
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/context"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/sourcespb"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sources"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sources/git"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sources/github"
+	"github.com/etyvrox/offensiveboar/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/sourcespb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sources"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sources/git"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sources/github"
 )
 
 // ScanGitHub scans GitHub with the provided options.
@@ -56,7 +56,7 @@ func (e *Engine) ScanGitHub(ctx context.Context, c sources.GithubConfig) (source
 	}
 	scanOptions := git.NewScanOptions(opts...)
 
-	sourceName := "trufflehog - github"
+	sourceName := "offensiveboar - github"
 	sourceID, jobID, _ := e.sourceManager.GetIDs(ctx, sourceName, github.SourceType)
 
 	githubSource := &github.Source{}

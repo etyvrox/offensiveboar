@@ -15,8 +15,8 @@ import (
 	regexp "github.com/wasilibs/go-re2"
 	"golang.org/x/oauth2/google"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/detectorspb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/detectors"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/detectorspb"
 )
 
 type Scanner struct{}
@@ -287,7 +287,7 @@ func cleanInput(input string) string {
 	input = strings.ReplaceAll(input, `\\"`, `"`)
 
 	// If the JSON is encoded, it needs to be unquoted for `json.Unmarshal` to succeed.
-	// https://github.com/trufflesecurity/trufflehog/issues/2864
+	// https://github.com/trufflesecurity/offensiveboar/issues/2864
 	if strings.Contains(input, `\"auth_provider_x509_cert_url\"`) {
 		unquoted, err := strconv.Unquote(`"` + input + `"`)
 		if err == nil {

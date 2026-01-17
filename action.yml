@@ -1,4 +1,4 @@
-name: 'TruffleHog OSS'
+name: 'OffensiveBoar OSS'
 description: 'Find and verify leaked credentials in your source code.'
 author: Truffle Security Co. <support@trufflesec.com>
 
@@ -16,11 +16,11 @@ inputs:
     required: false
   extra_args:
     default: ""
-    description: Extra args to be passed to the trufflehog cli.
+    description: Extra args to be passed to the offensiveboar cli.
     required: false
   version:
     default: "latest"
-    description: Scan with this trufflehog cli version.
+    description: Scan with this offensiveboar cli version.
     required: false
 branding:
   icon: "shield"
@@ -63,7 +63,7 @@ runs:
             head_commit=""
           fi
           if [ "$base_commit" == "$head_commit" ] ; then
-            echo "::error::BASE and HEAD commits are the same. TruffleHog won't scan anything. Please see documentation (https://github.com/trufflesecurity/trufflehog#octocat-trufflehog-github-action)."
+            echo "::error::BASE and HEAD commits are the same. OffensiveBoar won't scan anything. Please see documentation (https://github.com/trufflesecurity/offensiveboar#octocat-offensiveboar-github-action)."
             exit 1
           fi
         ##########################################
@@ -91,10 +91,10 @@ runs:
           fi
         fi
         ##########################################
-        ##          Run TruffleHog              ##
+        ##          Run OffensiveBoar              ##
         ##########################################
         docker run --rm -v .:/tmp -w /tmp \
-        ghcr.io/trufflesecurity/trufflehog:${VERSION} \
+        ghcr.io/trufflesecurity/offensiveboar:${VERSION} \
         git file:///tmp/ \
         --since-commit \
         ${BASE:-''} \

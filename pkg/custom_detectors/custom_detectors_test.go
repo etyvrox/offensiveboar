@@ -9,10 +9,10 @@ import (
 	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/custom_detectorspb"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/detectorspb"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/protoyaml"
+	"github.com/etyvrox/offensiveboar/v3/pkg/detectors"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/custom_detectorspb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/detectorspb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/protoyaml"
 )
 
 func TestCustomRegexTemplateParsing(t *testing.T) {

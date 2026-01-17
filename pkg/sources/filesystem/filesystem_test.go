@@ -13,11 +13,11 @@ import (
 	"github.com/stretchr/testify/require"
 	"google.golang.org/protobuf/types/known/anypb"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/context"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/source_metadatapb"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/sourcespb"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sources"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sourcestest"
+	"github.com/etyvrox/offensiveboar/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/source_metadatapb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/sourcespb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sources"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sourcestest"
 )
 
 func TestSource_Scan(t *testing.T) {
@@ -164,7 +164,7 @@ func TestEnumerate(t *testing.T) {
 	ctx := context.Background()
 
 	// Setup the connection to test enumeration.
-	dir, err := os.MkdirTemp("", "trufflehog-test-enumerate")
+	dir, err := os.MkdirTemp("", "offensiveboar-test-enumerate")
 	assert.NoError(t, err)
 	defer os.RemoveAll(dir)
 
@@ -414,7 +414,7 @@ func TestScanSubDirFile(t *testing.T) {
 
 func TestSkipBinaries(t *testing.T) {
 	// Create a temporary directory for testing
-	tempDir, err := os.MkdirTemp("", "trufflehog_test")
+	tempDir, err := os.MkdirTemp("", "offensiveboar_test")
 	require.NoError(t, err)
 	defer os.RemoveAll(tempDir)
 
@@ -465,7 +465,7 @@ func TestSkipBinaries(t *testing.T) {
 // directory with the provided contents. If dir is "", the operating system's
 // temp directory is used.
 func createTempFile(dir string, contents string) (*os.File, func(), error) {
-	tmpfile, err := os.CreateTemp(dir, "trufflehogtest")
+	tmpfile, err := os.CreateTemp(dir, "offensiveboartest")
 	if err != nil {
 		return nil, nil, err
 	}
@@ -485,7 +485,7 @@ func createTempFile(dir string, contents string) (*os.File, func(), error) {
 // given directory with files containing the provided contents. If dir is "",
 // the operating system's temp directory is used.
 func createTempDir(dir string, contents ...string) (string, func(), error) {
-	tmpdir, err := os.MkdirTemp(dir, "trufflehogtest")
+	tmpdir, err := os.MkdirTemp(dir, "offensiveboartest")
 	if err != nil {
 		return "", nil, err
 	}

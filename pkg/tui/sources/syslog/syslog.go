@@ -3,8 +3,8 @@ package syslog
 import (
 	"strings"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/tui/common"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/tui/components/textinputs"
+	"github.com/etyvrox/offensiveboar/v3/pkg/tui/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/tui/components/textinputs"
 )
 
 type syslogCmdModel struct {
@@ -58,7 +58,7 @@ func GetFields() syslogCmdModel {
 
 func (m syslogCmdModel) Cmd() string {
 	var command []string
-	command = append(command, "trufflehog", "syslog")
+	command = append(command, "offensiveboar", "syslog")
 
 	inputs := m.GetInputs()
 	syslogKeys := [5]string{"address", "protocol", "cert", "key", "format"}

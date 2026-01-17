@@ -25,11 +25,11 @@ import (
 	"google.golang.org/protobuf/types/known/anypb"
 	"gopkg.in/h2non/gock.v1"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/cache/simple"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/context"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/credentialspb"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/sourcespb"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sources"
+	"github.com/etyvrox/offensiveboar/v3/pkg/cache/simple"
+	"github.com/etyvrox/offensiveboar/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/credentialspb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/sourcespb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sources"
 )
 
 func createPrivateKey() string {
@@ -465,7 +465,7 @@ func TestHandleRateLimit(t *testing.T) {
 	assert.False(t, s.handleRateLimit(ctx, nil))
 
 	// Request
-	reqUrl, _ := url.Parse("https://github.com/trufflesecurity/trufflehog")
+	reqUrl, _ := url.Parse("https://github.com/trufflesecurity/offensiveboar")
 	res := &github.Response{
 		Response: &http.Response{
 			StatusCode: 429,
@@ -634,7 +634,7 @@ func TestEnumerate(t *testing.T) {
 
 	// Manually cache a repository to ensure that enumerate
 	// doesn't make duplicate API calls.
-	// See https://github.com/trufflesecurity/trufflehog/pull/2625
+	// See https://github.com/trufflesecurity/offensiveboar/pull/2625
 	repo := func() *github.Repository {
 		var (
 			name     = "cached-repo"
@@ -934,14 +934,14 @@ func Test_scan_SetProgressComplete(t *testing.T) {
 
 func TestGetRepoURLParts(t *testing.T) {
 	repoURLs := []string{
-		"https://github.com/trufflesecurity/trufflehog.git",
-		"git+https://github.com/trufflesecurity/trufflehog.git",
-		"ssh://github.com/trufflesecurity/trufflehog.git",
-		"ssh://git@github.com/trufflesecurity/trufflehog.git",
-		"git+ssh://git@github.com/trufflesecurity/trufflehog.git",
-		"git://github.com/trufflesecurity/trufflehog.git",
+		"https://github.com/trufflesecurity/offensiveboar.git",
+		"git+https://github.com/trufflesecurity/offensiveboar.git",
+		"ssh://github.com/trufflesecurity/offensiveboar.git",
+		"ssh://git@github.com/trufflesecurity/offensiveboar.git",
+		"git+ssh://git@github.com/trufflesecurity/offensiveboar.git",
+		"git://github.com/trufflesecurity/offensiveboar.git",
 	}
-	expected := []string{"github.com", "trufflesecurity", "trufflehog"}
+	expected := []string{"github.com", "trufflesecurity", "offensiveboar"}
 	for _, tt := range repoURLs {
 		_, parts, err := getRepoURLParts(tt)
 		if err != nil {

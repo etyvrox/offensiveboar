@@ -1,9 +1,9 @@
 version: 2
 builds:
-  - id: trufflehog-upx
-    binary: trufflehog
+  - id: offensiveboar-upx
+    binary: offensiveboar
     ldflags:
-      - -s -w -X 'github.com/trufflesecurity/trufflehog/v3/pkg/version.BuildVersion={{ .Version }}'
+      - -s -w -X 'github.com/trufflesecurity/offensiveboar/v3/pkg/version.BuildVersion={{ .Version }}'
     env: [CGO_ENABLED=0]
     goos:
     - linux
@@ -13,10 +13,10 @@ builds:
     hooks:
       post:
         - upx -q "{{ .Path }}"
-  - id: trufflehog
-    binary: trufflehog
+  - id: offensiveboar
+    binary: offensiveboar
     ldflags:
-      - -X 'github.com/trufflesecurity/trufflehog/v3/pkg/version.BuildVersion={{ .Version }}'
+      - -X 'github.com/trufflesecurity/offensiveboar/v3/pkg/version.BuildVersion={{ .Version }}'
     env: [CGO_ENABLED=0]
     goos:
     - darwin
@@ -103,13 +103,13 @@ docker_manifests:
 brews:
   - repository:
       owner: trufflesecurity
-      name: homebrew-trufflehog
+      name: homebrew-offensiveboar
       token: "{{ .Env.HOMEBREW_TAP_TOKEN }}"
     description: "Find credentials all over the place"
-    name: "trufflehog"
-    homepage: "https://github.com/trufflesecurity/trufflehog"
+    name: "offensiveboar"
+    homepage: "https://github.com/trufflesecurity/offensiveboar"
     install: |
-      bin.install "trufflehog"
+      bin.install "offensiveboar"
 signs:
   - cmd: cosign
     signature: "${artifact}.sig"

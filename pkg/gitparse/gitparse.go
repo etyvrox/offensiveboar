@@ -14,10 +14,10 @@ import (
 
 	"github.com/go-logr/logr"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/common"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/context"
-	bufferwriter "github.com/trufflesecurity/trufflehog/v3/pkg/writers/buffer_writer"
-	bufferedfilewriter "github.com/trufflesecurity/trufflehog/v3/pkg/writers/buffered_file_writer"
+	"github.com/etyvrox/offensiveboar/v3/pkg/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/context"
+	bufferwriter "github.com/etyvrox/offensiveboar/v3/pkg/writers/buffer_writer"
+	bufferedfilewriter "github.com/etyvrox/offensiveboar/v3/pkg/writers/buffered_file_writer"
 )
 
 const (
@@ -262,7 +262,7 @@ func (c *Parser) RepoPath(
 				"GIT_DIR="+absPath,
 			)
 			// We need those variables to handle incoming commits
-			// while using trufflehog in pre-receive hooks
+			// while using offensiveboar in pre-receive hooks
 			if dir := os.Getenv("GIT_OBJECT_DIRECTORY"); dir != "" {
 				cmd.Env = append(cmd.Env, "GIT_OBJECT_DIRECTORY="+dir)
 			}
@@ -810,11 +810,11 @@ func pathFromBinaryLine(line []byte) (string, bool) {
 		path = string(after[:len(after)-8])
 	} else if _, after, ok = bytes.Cut(line, []byte(` and "b/`)); ok {
 		// Edge case where the path is quoted.
-		// https://github.com/trufflesecurity/trufflehog/issues/2384
+		// https://github.com/trufflesecurity/offensiveboar/issues/2384
 
 		// Drop the `" differ\n` and handle escaped characters in the path.
 		// e.g., "\342\200\224" instead of "—".
-		// See https://github.com/trufflesecurity/trufflehog/issues/2418
+		// See https://github.com/trufflesecurity/offensiveboar/issues/2418
 		path, err = strconv.Unquote(`"` + string(after[:len(after)-9]) + `"`)
 		if err != nil {
 			return "", false
@@ -853,7 +853,7 @@ func isToFileLine(latestState ParseState, line []byte) bool {
 // Get the b/ file path.
 func pathFromToFileLine(line []byte) (string, bool) {
 	// Normalize paths, as they can end in `\n`, `\t\n`, etc.
-	// See https://github.com/trufflesecurity/trufflehog/issues/1060
+	// See https://github.com/trufflesecurity/offensiveboar/issues/1060
 	line = bytes.TrimSpace(line)
 
 	// File was deleted.
@@ -873,7 +873,7 @@ func pathFromToFileLine(line []byte) (string, bool) {
 
 		// Drop the trailing `"` and handle escaped characters in the path
 		// e.g., "\342\200\224" instead of "—".
-		// See https://github.com/trufflesecurity/trufflehog/issues/2418
+		// See https://github.com/trufflesecurity/offensiveboar/issues/2418
 		path, err = strconv.Unquote(`"` + string(after[:len(after)-1]) + `"`)
 		if err != nil {
 			return "", false

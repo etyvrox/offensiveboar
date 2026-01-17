@@ -7,8 +7,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors"
-	dpb "github.com/trufflesecurity/trufflehog/v3/pkg/pb/detectorspb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/detectors"
+	dpb "github.com/etyvrox/offensiveboar/v3/pkg/pb/detectorspb"
 )
 
 var (

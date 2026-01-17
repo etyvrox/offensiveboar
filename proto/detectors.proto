@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package detectors;
 
-option go_package = "github.com/trufflesecurity/trufflehog/v3/pkg/pb/detectorspb";
+option go_package = "github.com/etyvrox/offensiveboar/v3/pkg/pb/detectorspb";
 
 enum DecoderType {
   UNKNOWN = 0;
@@ -1049,6 +1049,7 @@ enum DetectorType {
   PhraseAccessToken = 1037;
   Photoroom = 1038;
   JWT = 1039;
+  Custom = 1040;
 }
 
 message Result {

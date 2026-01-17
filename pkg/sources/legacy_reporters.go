@@ -1,8 +1,8 @@
 package sources
 
 import (
-	"github.com/trufflesecurity/trufflehog/v3/pkg/common"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/context"
 )
 
 var _ ChunkReporter = (*ChanReporter)(nil)

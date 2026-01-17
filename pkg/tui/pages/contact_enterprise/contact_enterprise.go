@@ -6,8 +6,8 @@ import (
 	"github.com/charmbracelet/bubbles/key"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/tui/common"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/tui/styles"
+	"github.com/etyvrox/offensiveboar/v3/pkg/tui/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/tui/styles"
 )
 
 type ContactEnterprise struct {
@@ -42,7 +42,7 @@ func (m *ContactEnterprise) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 func (m *ContactEnterprise) View() string {
 
 	s := strings.Builder{}
-	s.WriteString("Interested in TruffleHog enterprise?\n")
+	s.WriteString("Interested in OffensiveBoar enterprise?\n")
 	s.WriteString(linkStyle.Render("🔗 https://trufflesecurity.com/contact"))
 
 	m.viewed = true

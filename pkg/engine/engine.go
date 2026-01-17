@@ -18,20 +18,20 @@ import (
 	lru "github.com/hashicorp/golang-lru/v2"
 	"google.golang.org/protobuf/proto"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/common"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/config"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/context"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/decoders"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/engine/ahocorasick"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/engine/defaults"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/giturl"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/output"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/detectorspb"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/source_metadatapb"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/sourcespb"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sources"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/verificationcache"
+	"github.com/etyvrox/offensiveboar/v3/pkg/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/config"
+	"github.com/etyvrox/offensiveboar/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/decoders"
+	"github.com/etyvrox/offensiveboar/v3/pkg/detectors"
+	"github.com/etyvrox/offensiveboar/v3/pkg/engine/ahocorasick"
+	"github.com/etyvrox/offensiveboar/v3/pkg/engine/defaults"
+	"github.com/etyvrox/offensiveboar/v3/pkg/giturl"
+	"github.com/etyvrox/offensiveboar/v3/pkg/output"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/detectorspb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/source_metadatapb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/sourcespb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sources"
+	"github.com/etyvrox/offensiveboar/v3/pkg/verificationcache"
 )
 
 var detectionTimeout = detectors.DefaultResponseTimeout
@@ -545,7 +545,7 @@ func (r *verificationOverlapTracker) increment() {
 	r.mu.Unlock()
 }
 
-const ignoreTag = "trufflehog:ignore"
+const ignoreTag = "offensiveboar:ignore"
 
 // AhoCorasickCoreKeywords returns a set of keywords that the engine's
 // AhoCorasickCore is using.

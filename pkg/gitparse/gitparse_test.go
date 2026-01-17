@@ -11,10 +11,10 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/context"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/process"
-	bufferwriter "github.com/trufflesecurity/trufflehog/v3/pkg/writers/buffer_writer"
-	bufferedfilewriter "github.com/trufflesecurity/trufflehog/v3/pkg/writers/buffered_file_writer"
+	"github.com/etyvrox/offensiveboar/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/process"
+	bufferwriter "github.com/etyvrox/offensiveboar/v3/pkg/writers/buffer_writer"
+	bufferedfilewriter "github.com/etyvrox/offensiveboar/v3/pkg/writers/buffered_file_writer"
 )
 
 type testCaseLine struct {
@@ -470,7 +470,7 @@ func TestLineChecksNoStaged(t *testing.T) {
 					IndexLine,
 					[]byte("--- /dev/null"),
 				},
-				// New file (https://github.com/trufflesecurity/trufflehog/issues/2109)
+				// New file (https://github.com/trufflesecurity/offensiveboar/issues/2109)
 				// diff --git a/libs/Unfit-1.0 b/libs/Unfit-1.0
 				// new file mode 160000
 				{
@@ -711,7 +711,7 @@ func TestLineChecksNoStaged(t *testing.T) {
 
 func TestBinaryPathParse(t *testing.T) {
 	cases := map[string]string{
-		"Binary files a/trufflehog_3.42.0_linux_arm64.tar.gz and /dev/null differ\n":                                                                                         "",
+		"Binary files a/offensiveboar_3.42.0_linux_arm64.tar.gz and /dev/null differ\n":                                                                                         "",
 		"Binary files /dev/null and b/plugin.sig differ\n":                                                                                                                   "plugin.sig",
 		"Binary files /dev/null and b/ Lunch and Learn - HCDiag.pdf differ\n":                                                                                                " Lunch and Learn - HCDiag.pdf",
 		"Binary files /dev/null and \"b/assets/retailers/ON-ikony-Platforma-ecom \\342\\200\\224 kopia.png\" differ\n":                                                       "assets/retailers/ON-ikony-Platforma-ecom — kopia.png",
@@ -871,7 +871,7 @@ func TestStagedDiffParsing(t *testing.T) {
 			IsBinary:      false,
 		},
 		{
-			PathB:    "trufflehog_3.42.0_linux_arm64.tar.gz",
+			PathB:    "offensiveboar_3.42.0_linux_arm64.tar.gz",
 			IsBinary: true,
 			Commit: &Commit{
 				Hash:    "",
@@ -976,7 +976,7 @@ func TestStagedDiffParsingBufferedFileWriter(t *testing.T) {
 			IsBinary:      false,
 		},
 		{
-			PathB:    "trufflehog_3.42.0_linux_arm64.tar.gz",
+			PathB:    "offensiveboar_3.42.0_linux_arm64.tar.gz",
 			IsBinary: true,
 			Commit: &Commit{
 				Hash:    "",
@@ -1830,10 +1830,10 @@ CommitDate:   Tue Jul 11 18:12:21 2023 -0400
 
     Delete binary file
 
-diff --git a/trufflehog_3.42.0_linux_arm64.tar.gz b/trufflehog_3.42.0_linux_arm64.tar.gz
+diff --git a/offensiveboar_3.42.0_linux_arm64.tar.gz b/offensiveboar_3.42.0_linux_arm64.tar.gz
 deleted file mode 100644
 index 7682212..0000000
-Binary files a/trufflehog_3.42.0_linux_arm64.tar.gz and /dev/null differ
+Binary files a/offensiveboar_3.42.0_linux_arm64.tar.gz and /dev/null differ
 
 commit afc6dc5d47f28366638da877ecb6b819c69e659b
 Author: John Smith <john.smith@example.com>
@@ -1843,9 +1843,9 @@ CommitDate:   Mon Jul 10 12:21:33 2023 -0400
 
     Change binary file
 
-diff --git a/trufflehog_3.42.0_linux_arm64.tar.gz b/trufflehog_3.42.0_linux_arm64.tar.gz
+diff --git a/offensiveboar_3.42.0_linux_arm64.tar.gz b/offensiveboar_3.42.0_linux_arm64.tar.gz
 index 0a7a5b4..7682212 100644
-Binary files a/trufflehog_3.42.0_linux_arm64.tar.gz and b/trufflehog_3.42.0_linux_arm64.tar.gz differ
+Binary files a/offensiveboar_3.42.0_linux_arm64.tar.gz and b/offensiveboar_3.42.0_linux_arm64.tar.gz differ
 
 commit 638595917417c5c8a956937b28c5127719023363
 Author: John Smith <john.smith@example.com>
@@ -1855,10 +1855,10 @@ CommitDate:   Mon Jul 10 12:20:35 2023 -0400
 
     Add binary file
 
-diff --git a/trufflehog_3.42.0_linux_arm64.tar.gz b/trufflehog_3.42.0_linux_arm64.tar.gz
+diff --git a/offensiveboar_3.42.0_linux_arm64.tar.gz b/offensiveboar_3.42.0_linux_arm64.tar.gz
 new file mode 100644
 index 0000000..0a7a5b4
-Binary files /dev/null and b/trufflehog_3.42.0_linux_arm64.tar.gz differ
+Binary files /dev/null and b/offensiveboar_3.42.0_linux_arm64.tar.gz differ
 
 commit ce0f5d1fe0272f180ccb660196f439c0c2f4ec8e (HEAD -> master)
 Author: John Smith <john.smith@example.com>
@@ -2260,7 +2260,7 @@ protos:
 			},
 		},
 		{
-			PathB: "trufflehog_3.42.0_linux_arm64.tar.gz",
+			PathB: "offensiveboar_3.42.0_linux_arm64.tar.gz",
 			Commit: &Commit{
 				Hash:      "afc6dc5d47f28366638da877ecb6b819c69e659b",
 				Author:    "John Smith <john.smith@example.com>",
@@ -2272,7 +2272,7 @@ protos:
 			IsBinary:      true,
 		},
 		{
-			PathB: "trufflehog_3.42.0_linux_arm64.tar.gz",
+			PathB: "offensiveboar_3.42.0_linux_arm64.tar.gz",
 			Commit: &Commit{
 				Hash:      "638595917417c5c8a956937b28c5127719023363",
 				Author:    "John Smith <john.smith@example.com>",
@@ -2391,10 +2391,10 @@ index 350685123d5..87d2220eb98 100644
 + * {@link QuarkusApplication#run} method before the main application exits.
 + */
 
-diff --git a/trufflehog_3.42.0_linux_arm64.tar.gz b/trufflehog_3.42.0_linux_arm64.tar.gz
+diff --git a/offensiveboar_3.42.0_linux_arm64.tar.gz b/offensiveboar_3.42.0_linux_arm64.tar.gz
 new file mode 100644
 index 0000000..0a7a5b4
-Binary files /dev/null and b/trufflehog_3.42.0_linux_arm64.tar.gz differ
+Binary files /dev/null and b/offensiveboar_3.42.0_linux_arm64.tar.gz differ
 
 diff --git a/lao b/lao
 deleted file mode 100644

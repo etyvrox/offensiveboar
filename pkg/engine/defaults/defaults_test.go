@@ -3,8 +3,8 @@ package defaults
 import (
 	"testing"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/detectorspb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/detectors"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/detectorspb"
 )
 
 func TestDefaultDetectorsHaveUniqueVersions(t *testing.T) {
@@ -53,7 +53,7 @@ func TestDefaultVersionerDetectorsHaveNonZeroVersions(t *testing.T) {
 	// Loop through all our default detectors and find the ones that
 	// implement Versioner. Of those, check each version is not zero.
 	// This is required due to an implementation detail of filtering detectors.
-	// See: https://github.com/trufflesecurity/trufflehog/blob/v3.63.7/main.go#L624-L638
+	// See: https://github.com/trufflesecurity/offensiveboar/blob/v3.63.7/main.go#L624-L638
 	for _, detector := range DefaultDetectors() {
 		v, ok := detector.(detectors.Versioner)
 		if !ok || v.Version() != 0 {

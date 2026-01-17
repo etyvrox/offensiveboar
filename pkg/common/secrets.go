@@ -36,7 +36,7 @@ func GetTestSecret(ctx context.Context) (secret *Secret, err error) {
 		return GetSecretFromEnv(filename)
 	}
 
-	return GetSecret(ctx, "trufflehog-testing", "test")
+	return GetSecret(ctx, "offensiveboar-testing", "test")
 }
 
 func GetSecret(ctx context.Context, gcpProject, name string) (secret *Secret, err error) {

@@ -13,7 +13,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/context"
 )
 
 func TestNewChunkedReader(t *testing.T) {
@@ -118,7 +118,7 @@ func TestNewChunkedReader(t *testing.T) {
 			input:      string(generateBinaryContent("dmg")),
 			chunkSize:  DefaultChunkSize,
 			peekSize:   DefaultPeekSize,
-			wantChunks: []string{"\x00\x00\x00\x00TruffleHog\x00\x00\x00\x00koly"},
+			wantChunks: []string{"\x00\x00\x00\x00OffensiveBoar\x00\x00\x00\x00koly"},
 			wantErr:    false,
 		},
 		{
@@ -126,7 +126,7 @@ func TestNewChunkedReader(t *testing.T) {
 			input:      string(generateBinaryContent("tar.gz")),
 			chunkSize:  DefaultChunkSize,
 			peekSize:   DefaultPeekSize,
-			wantChunks: []string{"\x1f\x8b\bthis is binary content - trufflehog\x00\x00\x00\x00"},
+			wantChunks: []string{"\x1f\x8b\bthis is binary content - offensiveboar\x00\x00\x00\x00"},
 			wantErr:    false,
 		},
 	}

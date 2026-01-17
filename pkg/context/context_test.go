@@ -11,7 +11,7 @@ import (
 	"github.com/go-logr/logr"
 	"github.com/go-logr/zapr"
 	"github.com/stretchr/testify/assert"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/log"
+	"github.com/etyvrox/offensiveboar/v3/pkg/log"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"go.uber.org/zap/zaptest"

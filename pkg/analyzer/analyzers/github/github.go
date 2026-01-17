@@ -8,12 +8,12 @@ import (
 	"github.com/fatih/color"
 	gh "github.com/google/go-github/v67/github"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/analyzer/analyzers"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/analyzer/analyzers/github/classic"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/analyzer/analyzers/github/common"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/analyzer/analyzers/github/finegrained"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/analyzer/config"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/analyzer/analyzers"
+	"github.com/etyvrox/offensiveboar/v3/pkg/analyzer/analyzers/github/classic"
+	"github.com/etyvrox/offensiveboar/v3/pkg/analyzer/analyzers/github/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/analyzer/analyzers/github/finegrained"
+	"github.com/etyvrox/offensiveboar/v3/pkg/analyzer/config"
+	"github.com/etyvrox/offensiveboar/v3/pkg/context"
 )
 
 var _ analyzers.Analyzer = (*Analyzer)(nil)

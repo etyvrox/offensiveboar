@@ -8,9 +8,9 @@ import (
 
 	regexp "github.com/wasilibs/go-re2"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/common"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/detectorspb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/detectors"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/detectorspb"
 )
 
 type Scanner struct{}
@@ -51,7 +51,7 @@ func (s Scanner) FromData(ctx context.Context, verify bool, data []byte) (result
 				continue
 			}
 			req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", resMatch))
-			req.Header.Add("User-Agent", "TruffleHog3 (example@example.com)")
+			req.Header.Add("User-Agent", "OffensiveBoar3 (example@example.com)")
 			res, err := client.Do(req)
 			if err == nil {
 				defer res.Body.Close()

@@ -9,7 +9,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/buffers/pool"
+	"github.com/etyvrox/offensiveboar/v3/pkg/buffers/pool"
 )
 
 func TestBufferedFileWriterNewThreshold(t *testing.T) {

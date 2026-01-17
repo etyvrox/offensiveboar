@@ -101,7 +101,7 @@ func TestMongoDB_Pattern(t *testing.T) {
 			match:       "mongodb://cefapp:MdTc8Kc8DzlTE1RUl1JVDGS4zw1U1t6145sPWqeStWA50xEUKPfUCGlnk3ACkfqH6qLAwpnm9awpY1m8dg0YlQ==@cefapp.documents.azure.com:10250/?ssl=true&sslverifycertificate=false",
 		},
 		// TODO: `%2Ftmp%2Fmongodb-27017.sock` fails with url.Parse.
-		// Then again, TruffleHog will never be able to verify a local socket on a remote machine.
+		// Then again, OffensiveBoar will never be able to verify a local socket on a remote machine.
 		{
 			name:        "unix_socket",
 			data:        `mongodb://u%24ername:pa%24%24w%7B%7Drd@%2Ftmp%2Fmongodb-27017.sock/test`,

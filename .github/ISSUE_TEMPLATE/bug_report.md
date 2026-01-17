@@ -6,17 +6,17 @@ labels: bug, needs triage
 assignees: trufflesecurity/product-eng
 ---
 
-Please review the [Community Note](https://github.com/trufflesecurity/trufflehog/blob/main/.github/community_note.md) before submitting
+Please review the [Community Note](https://github.com/trufflesecurity/offensiveboar/blob/main/.github/community_note.md) before submitting
 
-### TruffleHog Version
-<!--- Please run `trufflehog --version` to show the version. If you are not running the latest version, please upgrade because your issue may have already been fixed. --->
+### OffensiveBoar Version
+<!--- Please run `offensiveboar --version` to show the version. If you are not running the latest version, please upgrade because your issue may have already been fixed. --->
 
 ### Trace Output
 
 <!---
 Please provide a link to a GitHub Gist containing the complete debug output. Please do NOT paste the debug output in the issue; just paste a link to the Gist.
 
-To obtain the trace output, run trufflehog with the --log-level=5 flag.
+To obtain the trace output, run offensiveboar with the --log-level=5 flag.
 --->
 
 ### Expected Behavior

@@ -12,9 +12,9 @@ import (
 	"io"
 	"os"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/buffers/buffer"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/buffers/pool"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/cleantemp"
+	"github.com/etyvrox/offensiveboar/v3/pkg/buffers/buffer"
+	"github.com/etyvrox/offensiveboar/v3/pkg/buffers/pool"
+	"github.com/etyvrox/offensiveboar/v3/pkg/cleantemp"
 )
 
 const defaultBufferSize = 1 << 16 // 64KB

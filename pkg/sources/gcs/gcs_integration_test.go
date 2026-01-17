@@ -11,10 +11,10 @@ import (
 	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/context"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/source_metadatapb"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/sourcespb"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sources"
+	"github.com/etyvrox/offensiveboar/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/source_metadatapb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/sourcespb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sources"
 )
 
 func TestChunks(t *testing.T) {
@@ -90,7 +90,7 @@ func TestChunks_PublicBucket(t *testing.T) {
 						Bucket:      publicBucket,
 						ContentType: "text/plain",
 						Email:       "",
-						Link:        "https://storage.googleapis.com/download/storage/v1/b/public-trufflehog-test-bucket/o/aws1.txt?generation=1678334408999764&alt=media",
+						Link:        "https://storage.googleapis.com/download/storage/v1/b/public-offensiveboar-test-bucket/o/aws1.txt?generation=1678334408999764&alt=media",
 						Acls:        []string{},
 					},
 				},

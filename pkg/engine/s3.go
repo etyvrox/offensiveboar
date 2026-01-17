@@ -7,11 +7,11 @@ import (
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/context"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/credentialspb"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/sourcespb"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sources"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sources/s3"
+	"github.com/etyvrox/offensiveboar/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/credentialspb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/sourcespb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sources"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sources/s3"
 )
 
 // ScanS3 scans S3 buckets.
@@ -61,7 +61,7 @@ func (e *Engine) ScanS3(ctx context.Context, c sources.S3Config) (sources.JobPro
 		return sources.JobProgressRef{}, err
 	}
 
-	sourceName := "trufflehog - s3"
+	sourceName := "offensiveboar - s3"
 	sourceID, jobID, _ := e.sourceManager.GetIDs(ctx, sourceName, s3.SourceType)
 
 	s3Source := &s3.Source{}

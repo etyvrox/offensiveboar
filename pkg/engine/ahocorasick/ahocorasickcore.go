@@ -6,9 +6,9 @@ import (
 
 	ahocorasick "github.com/BobuSumisu/aho-corasick"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/custom_detectors"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/detectorspb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/custom_detectors"
+	"github.com/etyvrox/offensiveboar/v3/pkg/detectors"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/detectorspb"
 )
 
 // DetectorKey is used to identify a detector in the keywordsToDetectors map.

@@ -6,8 +6,8 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/engine/ahocorasick"
+	"github.com/etyvrox/offensiveboar/v3/pkg/detectors"
+	"github.com/etyvrox/offensiveboar/v3/pkg/engine/ahocorasick"
 )
 
 func TestHubspotV2_Pattern(t *testing.T) {

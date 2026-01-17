@@ -14,15 +14,15 @@ import (
 	"github.com/paulbellamy/ratecounter"
 	"golang.org/x/sync/semaphore"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/context"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/decoders"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/engine/defaults"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/log"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/source_metadatapb"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/sourcespb"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sources"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sources/git"
+	"github.com/etyvrox/offensiveboar/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/decoders"
+	"github.com/etyvrox/offensiveboar/v3/pkg/detectors"
+	"github.com/etyvrox/offensiveboar/v3/pkg/engine/defaults"
+	"github.com/etyvrox/offensiveboar/v3/pkg/log"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/source_metadatapb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/sourcespb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sources"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sources/git"
 )
 
 var (
@@ -43,7 +43,7 @@ var (
 
 func main() {
 	// setup logger
-	logger, flush := log.New("trufflehog", log.WithConsoleSink(os.Stderr))
+	logger, flush := log.New("offensiveboar", log.WithConsoleSink(os.Stderr))
 	// make it the default logger for contexts
 	context.SetDefaultLogger(logger)
 	defer func() { _ = flush() }()

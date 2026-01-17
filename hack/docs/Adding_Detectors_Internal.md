@@ -46,7 +46,7 @@ If you think that something should be included outside of these guidelines, plea
 
 ### Adding New Token Formats to an Existing Scanner
 
-In some instances, services will update their token format, requiring a new regex to properly detect secrets in addition to supporting the previous token format. Accommodating this can be done without adding a net-new detector. [We provide a `Versioner` interface](https://github.com/trufflesecurity/trufflehog/blob/e18cfd5e0af1469a9f05b8d5732bcc94c39da49c/pkg/detectors/detectors.go#L30) that can be implemented.
+In some instances, services will update their token format, requiring a new regex to properly detect secrets in addition to supporting the previous token format. Accommodating this can be done without adding a net-new detector. [We provide a `Versioner` interface](https://github.com/trufflesecurity/offensiveboar/blob/e18cfd5e0af1469a9f05b8d5732bcc94c39da49c/pkg/detectors/detectors.go#L30) that can be implemented.
 
 1. Create two new directories `v1` and `v2`. Move the existing detector and tests into `v1`, and add new files to `v2`.
 Ex: `<packagename>/<old_files>` -> `<packagename>/v1/<old_files>`, `<packagename>/v2/<new_files>`
@@ -98,7 +98,7 @@ There are two types of reasons that secret verification can fail:
 * The candidate secret is not actually a valid secret.
 * Something went wrong in the process unrelated to the candidate secret, such as a transient network error or an unexpected API response.
 
-In TruffleHog parlance, the first type of verification response is called _determinate_ and the second type is called _indeterminate_. Verification code should distinguish between the two by returning an error object in the result struct **only** for indeterminate failures. In general, a verifier should return an error (indicating an indeterminate failure) in all cases that haven't been explicitly identified as determinate failure states.
+In OffensiveBoar parlance, the first type of verification response is called _determinate_ and the second type is called _indeterminate_. Verification code should distinguish between the two by returning an error object in the result struct **only** for indeterminate failures. In general, a verifier should return an error (indicating an indeterminate failure) in all cases that haven't been explicitly identified as determinate failure states.
 
 For example, consider a hypothetical authentication endpoint that returns `200 OK` for valid credentials and `403 Forbidden` for invalid credentials. The verifier for this endpoint could make an HTTP request and use the response status code to decide what to return:
 * A `200` response would indicate that verification succeeded. (Or maybe any `2xx` response.)
@@ -114,7 +114,7 @@ Do not embed test credentials in the test code. Instead, use GCP Secrets Manager
    Note: `/tmp/s` is a valid path on Linux. You will need to change that for Windows or OSX, otherwise you will see an error. On Windows you will also need to install [WSL](https://docs.microsoft.com/en-us/windows/wsl/install).
 
    ```bash
-   gcloud secrets versions access --project trufflehog-testing --secret detectors5 latest > /tmp/s
+   gcloud secrets versions access --project offensiveboar-testing --secret detectors5 latest > /tmp/s
    ```
 
 2. Add the secret that you need for testing.
@@ -131,7 +131,7 @@ Do not embed test credentials in the test code. Instead, use GCP Secrets Manager
 3. Update the secret version with your modification.
 
    ```bash
-   gcloud secrets versions add --project trufflehog-testing detectors5 --data-file /tmp/s
+   gcloud secrets versions add --project offensiveboar-testing detectors5 --data-file /tmp/s
    ```
    Note: We increment the detectors file name `detectors(n+1)` once the previous one exceeds the max size allowed by GSM (65kb).
 
@@ -150,7 +150,7 @@ Do not embed test credentials in the test code. Instead, use GCP Secrets Manager
    ```bash
    sudo apt install dos2unix
    ```
-4. Identify the `trufflehog` local directory and convert `scripts/gen_proto.sh` file in Unix format.
+4. Identify the `offensiveboar` local directory and convert `scripts/gen_proto.sh` file in Unix format.
    ```bash
    dos2unix ./scripts/gen_proto.sh
    ```

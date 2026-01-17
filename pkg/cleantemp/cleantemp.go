@@ -11,16 +11,16 @@ import (
 
 	"github.com/mitchellh/go-ps"
 
-	logContext "github.com/trufflesecurity/trufflehog/v3/pkg/context"
+	logContext "github.com/etyvrox/offensiveboar/v3/pkg/context"
 )
 
 const (
-	defaultExecPath             = "trufflehog"
+	defaultExecPath             = "offensiveboar"
 	defaultArtifactPrefixFormat = "%s-%d-"
 )
 
 // MkdirTemp returns a temporary directory path formatted as:
-// trufflehog-<pid>-<randint>
+// offensiveboar-<pid>-<randint>
 func MkdirTemp() (string, error) {
 	pid := os.Getpid()
 	tmpdir := fmt.Sprintf(defaultArtifactPrefixFormat, defaultExecPath, pid)
@@ -32,7 +32,7 @@ func MkdirTemp() (string, error) {
 }
 
 // Unlike MkdirTemp, we only want to generate the filename string.
-// The tempfile creation in trufflehog we're interested in
+// The tempfile creation in offensiveboar we're interested in
 // is generally handled by "github.com/trufflesecurity/disk-buffer-reader"
 func MkFilename() string {
 	pid := os.Getpid()
@@ -41,7 +41,7 @@ func MkFilename() string {
 }
 
 // Only compile during startup.
-var trufflehogRE = regexp.MustCompile(`^trufflehog-\d+-\d+$`)
+var offensiveboarRE = regexp.MustCompile(`^offensiveboar-\d+-\d+$`)
 
 // CleanTempArtifacts deletes orphaned temp directories and files that do not contain running PID values.
 func CleanTempArtifacts(ctx logContext.Context) error {
@@ -64,7 +64,7 @@ func CleanTempArtifacts(ctx logContext.Context) error {
 	}
 
 	if len(pids) == 0 {
-		ctx.Logger().V(5).Info("No trufflehog processes were found")
+		ctx.Logger().V(5).Info("No offensiveboar processes were found")
 		return nil
 	}
 
@@ -85,7 +85,7 @@ func CleanTempArtifacts(ctx logContext.Context) error {
 		}
 		entry := entries[0]
 
-		if trufflehogRE.MatchString(entry.Name()) {
+		if offensiveboarRE.MatchString(entry.Name()) {
 
 			// Mark these artifacts initially as ones that should be deleted.
 			shouldDelete := true
@@ -118,7 +118,7 @@ func CleanTempArtifacts(ctx logContext.Context) error {
 	return nil
 }
 
-// CleanTempDirsForLegacyJSON removes all directories that start with "trufflehog-"
+// CleanTempDirsForLegacyJSON removes all directories that start with "offensiveboar-"
 // from either the provided clonePath (if not empty) or the OS temp directory.
 func CleanTempDirsForLegacyJSON(baseDir string) error {
 	// If no custom clone path was provided, clean repos from the OS temp directory
@@ -133,7 +133,7 @@ func CleanTempDirsForLegacyJSON(baseDir string) error {
 	}
 
 	for _, entry := range entries {
-		if entry.IsDir() && strings.HasPrefix(entry.Name(), "trufflehog-") {
+		if entry.IsDir() && strings.HasPrefix(entry.Name(), "offensiveboar-") {
 			fullPath := filepath.Join(baseDir, entry.Name())
 			if err := os.RemoveAll(fullPath); err != nil {
 				return err

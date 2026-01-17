@@ -8,7 +8,7 @@ import (
 
 	"github.com/getsentry/sentry-go"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/context"
 )
 
 // Recover handles panics and reports to Sentry.

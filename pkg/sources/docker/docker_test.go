@@ -11,11 +11,11 @@ import (
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/protobuf/types/known/anypb"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/context"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/credentialspb"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/source_metadatapb"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/sourcespb"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sources"
+	"github.com/etyvrox/offensiveboar/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/credentialspb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/source_metadatapb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/sourcespb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sources"
 )
 
 func TestDockerImageScan(t *testing.T) {
@@ -119,7 +119,7 @@ func TestGHCRRegistry(t *testing.T) {
 		Credential: &sourcespb.Docker_Unauthenticated{
 			Unauthenticated: &credentialspb.Unauthenticated{},
 		},
-		Images: []string{"ghcr.io/trufflesecurity/trufflehog:3.0.0-rc0-amd64"}, // https://github.com/trufflesecurity/trufflehog/pkgs/container/trufflehog
+		Images: []string{"ghcr.io/trufflesecurity/offensiveboar:3.0.0-rc0-amd64"}, // https://github.com/trufflesecurity/offensiveboar/pkgs/container/offensiveboar
 	}
 
 	conn := &anypb.Any{}

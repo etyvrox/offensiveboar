@@ -23,18 +23,18 @@ import (
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/cache"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/cache/simple"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/common"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/context"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/feature"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/giturl"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/handlers"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/source_metadatapb"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/sourcespb"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sanitizer"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sources"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sources/git"
+	"github.com/etyvrox/offensiveboar/v3/pkg/cache"
+	"github.com/etyvrox/offensiveboar/v3/pkg/cache/simple"
+	"github.com/etyvrox/offensiveboar/v3/pkg/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/feature"
+	"github.com/etyvrox/offensiveboar/v3/pkg/giturl"
+	"github.com/etyvrox/offensiveboar/v3/pkg/handlers"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/source_metadatapb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/sourcespb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sanitizer"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sources"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sources/git"
 )
 
 const (
@@ -402,7 +402,7 @@ func (s *Source) Enumerate(ctx context.Context, reporter sources.UnitReporter) e
 	}
 	// Report any values that were already configured.
 	// This compensates for differences in enumeration logic between `--org` and `--repo`.
-	// See: https://github.com/trufflesecurity/trufflehog/pull/2379#discussion_r1487454788
+	// See: https://github.com/trufflesecurity/offensiveboar/pull/2379#discussion_r1487454788
 	for _, name := range s.filteredRepoCache.Keys() {
 		url, _ := s.filteredRepoCache.Get(name)
 		url, err := s.ensureRepoInfoCache(ctx, url, &unitErrorReporter{reporter})
@@ -500,7 +500,7 @@ func (s *Source) ensureRepoInfoCache(ctx context.Context, repo string, reporter 
 			gistID := extractGistID(urlParts)
 			gist, _, err := s.connector.APIClient().Gists.Get(ctx, gistID)
 			// Normalize the URL to the Gist's pull URL.
-			// See https://github.com/trufflesecurity/trufflehog/pull/2625#issuecomment-2025507937
+			// See https://github.com/trufflesecurity/offensiveboar/pull/2625#issuecomment-2025507937
 			repo = gist.GetGitPullURL()
 
 			if s.handleRateLimit(ctx, err, reporter) {
@@ -768,7 +768,7 @@ func (s *Source) cloneAndScanRepo(ctx context.Context, repoURL string, repoInfo 
 	// remove the path only if it was created as a temporary path, or if it is a clone path and --no-cleanup is not set.
 	// if legacy JSON is enabled, don't remove the directory because we need it for outputting legacy JSON.
 	if !s.conn.GetPrintLegacyJson() {
-		if strings.HasPrefix(path, filepath.Join(os.TempDir(), "trufflehog")) || (!s.conn.NoCleanup && s.conn.GetClonePath() != "") {
+		if strings.HasPrefix(path, filepath.Join(os.TempDir(), "offensiveboar")) || (!s.conn.NoCleanup && s.conn.GetClonePath() != "") {
 			defer os.RemoveAll(path)
 		}
 	}
@@ -1121,7 +1121,7 @@ func (s *Source) scanComments(ctx context.Context, repoPath string, repoInfo rep
 // This is typically 3 segments: host, owner, and name/ID; however, Gists have some edge cases.
 //
 // Examples:
-// - "https://github.com/trufflesecurity/trufflehog" => ["github.com", "trufflesecurity", "trufflehog"]
+// - "https://github.com/trufflesecurity/offensiveboar" => ["github.com", "trufflesecurity", "offensiveboar"]
 // - "https://gist.github.com/nat/5fdbb7f945d121f197fb074578e53948" => ["gist.github.com", "nat", "5fdbb7f945d121f197fb074578e53948"]
 // - "https://gist.github.com/ff0e5e8dc8ec22f7a25ddfc3492d3451.git" => ["gist.github.com", "ff0e5e8dc8ec22f7a25ddfc3492d3451"]
 // - "https://github.company.org/gist/nat/5fdbb7f945d121f197fb074578e53948.git" => ["github.company.org", "gist", "nat", "5fdbb7f945d121f197fb074578e53948"]

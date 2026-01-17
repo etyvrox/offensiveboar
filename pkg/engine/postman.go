@@ -6,10 +6,10 @@ import (
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/context"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/sourcespb"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sources"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sources/postman"
+	"github.com/etyvrox/offensiveboar/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/sourcespb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sources"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sources/postman"
 )
 
 // ScanPostman scans Postman with the provided options.
@@ -46,7 +46,7 @@ func (e *Engine) ScanPostman(ctx context.Context, c sources.PostmanConfig) (sour
 		return sources.JobProgressRef{}, err
 	}
 
-	sourceName := "trufflehog - postman"
+	sourceName := "offensiveboar - postman"
 	sourceID, jobID, _ := e.sourceManager.GetIDs(ctx, sourceName, postman.SourceType)
 
 	postmanSource := &postman.Source{

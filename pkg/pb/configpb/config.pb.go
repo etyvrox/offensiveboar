@@ -7,8 +7,8 @@
 package configpb
 
 import (
-	custom_detectorspb "github.com/trufflesecurity/trufflehog/v3/pkg/pb/custom_detectorspb"
-	sourcespb "github.com/trufflesecurity/trufflehog/v3/pkg/pb/sourcespb"
+	custom_detectorspb "github.com/etyvrox/offensiveboar/v3/pkg/pb/custom_detectorspb"
+	sourcespb "github.com/etyvrox/offensiveboar/v3/pkg/pb/sourcespb"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"

@@ -589,7 +589,7 @@ func deleteInviteFromWorkspace(client *http.Client, key string, secretInfo *Secr
 func textToSpeech(client *http.Client, key string, secretInfo *SecretInfo) error {
 	// send fake model id in payload
 	payload := map[string]interface{}{
-		"text":     "This is trufflehog trying to check text to speech permission of the token",
+		"text":     "This is offensiveboar trying to check text to speech permission of the token",
 		"model_id": fakeID,
 	}
 

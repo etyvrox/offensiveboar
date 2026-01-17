@@ -7,10 +7,10 @@ import (
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/context"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/sourcespb"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sources"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sources/syslog"
+	"github.com/etyvrox/offensiveboar/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/sourcespb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sources"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sources/syslog"
 )
 
 // ScanSyslog is a source that scans syslog files.
@@ -41,7 +41,7 @@ func (e *Engine) ScanSyslog(ctx context.Context, c sources.SyslogConfig) (source
 		return sources.JobProgressRef{}, errors.WrapPrefix(err, "error unmarshalling connection", 0)
 	}
 
-	sourceName := "trufflehog - syslog"
+	sourceName := "offensiveboar - syslog"
 	sourceID, jobID, _ := e.sourceManager.GetIDs(ctx, sourceName, syslog.SourceType)
 	syslogSource := &syslog.Source{}
 	if err := syslogSource.Init(ctx, sourceName, jobID, sourceID, true, &conn, c.Concurrency); err != nil {

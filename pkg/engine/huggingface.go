@@ -4,10 +4,10 @@ import (
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/context"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/sourcespb"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sources"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sources/huggingface"
+	"github.com/etyvrox/offensiveboar/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/sourcespb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sources"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sources/huggingface"
 )
 
 // HuggingFaceConfig represents the configuration for HuggingFace.
@@ -69,7 +69,7 @@ func (e *Engine) ScanHuggingface(ctx context.Context, c HuggingfaceConfig) (sour
 		return sources.JobProgressRef{}, err
 	}
 
-	sourceName := "trufflehog - huggingface"
+	sourceName := "offensiveboar - huggingface"
 	sourceID, jobID, _ := e.sourceManager.GetIDs(ctx, sourceName, sourcespb.SourceType_SOURCE_TYPE_HUGGINGFACE)
 
 	huggingfaceSource := &huggingface.Source{}

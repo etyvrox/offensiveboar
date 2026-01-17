@@ -8,8 +8,8 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/detectorspb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/detectors"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/detectorspb"
 	regexp "github.com/wasilibs/go-re2"
 )
 
@@ -64,7 +64,7 @@ func (s Scanner) FromData(ctx context.Context, verify bool, data []byte) (result
 
 				// We don't want to actually send anything to webhooks we find. To verify them without spamming them, we
 				// send an intentionally malformed message and look for a particular expected error message.
-				payload := strings.NewReader(`intentionally malformed JSON from TruffleHog scan`)
+				payload := strings.NewReader(`intentionally malformed JSON from OffensiveBoar scan`)
 				req, err := http.NewRequestWithContext(ctx, "POST", resMatch, payload)
 				if err != nil {
 					continue

@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/go-logr/logr"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/log"
+	"github.com/etyvrox/offensiveboar/v3/pkg/log"
 )
 
 var (

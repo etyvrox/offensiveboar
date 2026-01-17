@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package sources;
 
-option go_package = "github.com/trufflesecurity/trufflehog/v3/pkg/pb/sourcespb";
+option go_package = "github.com/etyvrox/offensiveboar/v3/pkg/pb/sourcespb";
 
 import "validate/validate.proto";
 import "credentials.proto";
@@ -116,7 +116,7 @@ message Bitbucket {
   string oauth_authorization_endpoint = 10; // endpoint for OAuth authorization flow in Bitbucket Data Center application links
   string oauth_token_endpoint = 11; // endpoint for getting OAuth access/refresh tokens in Bitbucket Data Center application links
   repeated string oauth_scopes = 12; // list of OAuth scopes that the access token is provided
-  bool allow_secrets_manager_write = 13; // flag to explicitly allow TruffleHog to write to the user's secrets manager
+  bool allow_secrets_manager_write = 13; // flag to explicitly allow OffensiveBoar to write to the user's secrets manager
 }
 
 message CircleCI {

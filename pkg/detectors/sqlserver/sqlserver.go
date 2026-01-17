@@ -13,9 +13,9 @@ import (
 	mssql "github.com/microsoft/go-mssqldb"
 	"github.com/microsoft/go-mssqldb/msdsn"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/detectorspb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/detectorspb"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors"
+	"github.com/etyvrox/offensiveboar/v3/pkg/detectors"
 )
 
 type Scanner struct{}

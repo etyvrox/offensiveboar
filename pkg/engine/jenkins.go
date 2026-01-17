@@ -8,11 +8,11 @@ import (
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/context"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/credentialspb"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/sourcespb"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sources"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sources/jenkins"
+	"github.com/etyvrox/offensiveboar/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/credentialspb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/sourcespb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sources"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sources/jenkins"
 )
 
 type JenkinsConfig struct {
@@ -70,11 +70,11 @@ func (e *Engine) ScanJenkins(ctx context.Context, jenkinsConfig JenkinsConfig) (
 		return sources.JobProgressRef{}, err
 	}
 
-	sourceName := "trufflehog - Jenkins"
+	sourceName := "offensiveboar - Jenkins"
 	sourceID, jobID, _ := e.sourceManager.GetIDs(ctx, sourceName, jenkins.SourceType)
 
 	jenkinsSource := &jenkins.Source{}
-	if err := jenkinsSource.Init(ctx, "trufflehog - Jenkins", jobID, sourceID, true, &conn, runtime.NumCPU()); err != nil {
+	if err := jenkinsSource.Init(ctx, "offensiveboar - Jenkins", jobID, sourceID, true, &conn, runtime.NumCPU()); err != nil {
 		return sources.JobProgressRef{}, err
 	}
 	return e.sourceManager.EnumerateAndScan(ctx, sourceName, jenkinsSource)

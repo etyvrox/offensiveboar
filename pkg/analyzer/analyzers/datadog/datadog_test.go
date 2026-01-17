@@ -8,10 +8,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/analyzer/analyzers"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/analyzer/config"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/common"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/analyzer/analyzers"
+	"github.com/etyvrox/offensiveboar/v3/pkg/analyzer/config"
+	"github.com/etyvrox/offensiveboar/v3/pkg/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/context"
 )
 
 //go:embed expected_output.json
@@ -23,7 +23,7 @@ func TestAnalyzer_Analyze(t *testing.T) {
 
 	// Get API keys from GCP
 	var apiKey, appKey string
-	testSecrets, err := common.GetSecret(ctx, "trufflehog-testing", "analyzers1")
+	testSecrets, err := common.GetSecret(ctx, "offensiveboar-testing", "analyzers1")
 	if err != nil {
 		t.Fatalf("Could not get test secrets from GCP: %s", err)
 	}

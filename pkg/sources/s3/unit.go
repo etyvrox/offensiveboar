@@ -3,7 +3,7 @@ package s3
 import (
 	"fmt"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sources"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sources"
 )
 
 const SourceUnitKindBucket sources.SourceUnitKind = "bucket"

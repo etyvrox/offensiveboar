@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/context"
 )
 
 // Maps for API and HTML paths

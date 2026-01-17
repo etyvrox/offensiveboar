@@ -1,1 +1,1 @@
-Please report any security issues to security@trufflesec.com and include `trufflehog` in the subject
+Please report any security issues to security@trufflesec.com and include `offensiveboar` in the subject

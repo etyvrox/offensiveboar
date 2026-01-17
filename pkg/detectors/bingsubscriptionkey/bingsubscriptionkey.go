@@ -8,9 +8,9 @@ import (
 
 	regexp "github.com/wasilibs/go-re2"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/common"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/detectorspb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/detectors"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/detectorspb"
 )
 
 type Scanner struct {
@@ -60,7 +60,7 @@ func (s Scanner) FromData(ctx context.Context, verify bool, data []byte) (result
 }
 
 func verifyMatch(ctx context.Context, client *http.Client, subscriptionKey string) (bool, error) {
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, "https://api.bing.microsoft.com/v7.0/search?q=trufflehog", nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, "https://api.bing.microsoft.com/v7.0/search?q=offensiveboar", nil)
 	if err != nil {
 		return false, err
 	}

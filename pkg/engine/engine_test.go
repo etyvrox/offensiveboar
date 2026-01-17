@@ -14,20 +14,20 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/trufflesecurity/trufflehog/v3/pkg/config"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/context"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/custom_detectors"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/decoders"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/detectors/gitlab/v2"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/engine/ahocorasick"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/engine/defaults"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/custom_detectorspb"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/detectorspb"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/source_metadatapb"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/pb/sourcespb"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/sources"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/verificationcache"
+	"github.com/etyvrox/offensiveboar/v3/pkg/config"
+	"github.com/etyvrox/offensiveboar/v3/pkg/context"
+	"github.com/etyvrox/offensiveboar/v3/pkg/custom_detectors"
+	"github.com/etyvrox/offensiveboar/v3/pkg/decoders"
+	"github.com/etyvrox/offensiveboar/v3/pkg/detectors"
+	"github.com/etyvrox/offensiveboar/v3/pkg/detectors/gitlab/v2"
+	"github.com/etyvrox/offensiveboar/v3/pkg/engine/ahocorasick"
+	"github.com/etyvrox/offensiveboar/v3/pkg/engine/defaults"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/custom_detectorspb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/detectorspb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/source_metadatapb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/pb/sourcespb"
+	"github.com/etyvrox/offensiveboar/v3/pkg/sources"
+	"github.com/etyvrox/offensiveboar/v3/pkg/verificationcache"
 )
 
 const fakeDetectorKeyword = "fakedetector"
@@ -83,7 +83,7 @@ func TestFragmentLineOffset(t *testing.T) {
 		{
 			name: "ignore found on same line",
 			chunk: &sources.Chunk{
-				Data: []byte("line1\nline2\nsecret here trufflehog:ignore\nline4"),
+				Data: []byte("line1\nline2\nsecret here offensiveboar:ignore\nline4"),
 			},
 			result: &detectors.Result{
 				Raw: []byte("secret here"),
@@ -105,7 +105,7 @@ func TestFragmentLineOffset(t *testing.T) {
 		{
 			name: "ignore on different line",
 			chunk: &sources.Chunk{
-				Data: []byte("line1\nline2\ntrufflehog:ignore\nline4\nsecret here\nline6"),
+				Data: []byte("line1\nline2\noffensiveboar:ignore\nline4\nsecret here\nline6"),
 			},
 			result: &detectors.Result{
 				Raw: []byte("secret here"),
@@ -116,7 +116,7 @@ func TestFragmentLineOffset(t *testing.T) {
 		{
 			name: "match on consecutive lines",
 			chunk: &sources.Chunk{
-				Data: []byte("line1\nline2\ntrufflehog:ignore\nline4\nsecret\nhere\nline6"),
+				Data: []byte("line1\nline2\noffensiveboar:ignore\nline4\nsecret\nhere\nline6"),
 			},
 			result: &detectors.Result{
 				Raw: []byte("secret\nhere"),
@@ -127,7 +127,7 @@ func TestFragmentLineOffset(t *testing.T) {
 		{
 			name: "ignore on last consecutive lines",
 			chunk: &sources.Chunk{
-				Data: []byte("line1\nline2\nline3\nsecret\nhere // trufflehog:ignore\nline5"),
+				Data: []byte("line1\nline2\nline3\nsecret\nhere // offensiveboar:ignore\nline5"),
 			},
 			result: &detectors.Result{
 				Raw: []byte("secret\nhere"),
@@ -138,7 +138,7 @@ func TestFragmentLineOffset(t *testing.T) {
 		{
 			name: "ignore on last line",
 			chunk: &sources.Chunk{
-				Data: []byte("line1\nline2\nline3\nsecret here // trufflehog:ignore"),
+				Data: []byte("line1\nline2\nline3\nsecret here // offensiveboar:ignore"),
 			},
 			result: &detectors.Result{
 				Raw: []byte("secret here"),
@@ -1257,7 +1257,7 @@ def test_something():
     connection_string = "who-cares"
 
     # Ignoring this does not work
-    assert connection_string == "postgres://master_user:master_password@hostname:1234/main"  # trufflehog:ignore`,
+    assert connection_string == "postgres://master_user:master_password@hostname:1234/main"  # offensiveboar:ignore`,
 			expectedFindings: 0,
 		},
 		{
@@ -1269,7 +1269,7 @@ def test_something():
     connection_string = "who-cares"
 
     # Ignoring this does not work
-	assert some_other_stuff == "blah" # trufflehog:ignore
+	assert some_other_stuff == "blah" # offensiveboar:ignore
     assert connection_string == "postgres://master_user:master_password@hostname:1234/main"`,
 			expectedFindings: 1,
 		},

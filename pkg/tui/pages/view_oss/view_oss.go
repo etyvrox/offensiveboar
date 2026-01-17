@@ -6,8 +6,8 @@ import (
 	"github.com/charmbracelet/bubbles/key"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/tui/common"
-	"github.com/trufflesecurity/trufflehog/v3/pkg/tui/styles"
+	"github.com/etyvrox/offensiveboar/v3/pkg/tui/common"
+	"github.com/etyvrox/offensiveboar/v3/pkg/tui/styles"
 )
 
 type ViewOSS struct {
@@ -42,7 +42,7 @@ func (m *ViewOSS) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 func (m *ViewOSS) View() string {
 	s := strings.Builder{}
 	s.WriteString("View our open-source project on GitHub\n")
-	s.WriteString(linkStyle.Render("🔗 https://github.com/trufflesecurity/trufflehog "))
+	s.WriteString(linkStyle.Render("🔗 https://github.com/trufflesecurity/offensiveboar "))
 
 	m.viewed = true
 	return styles.AppStyle.Render(s.String())

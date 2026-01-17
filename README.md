@@ -1,18 +1,7 @@
 <p align="center">
-  <img alt="OffensiveBoar Logo" src="https://storage.googleapis.com/offensiveboar-static-sources/pixel_pig.png" height="140" />
   <h2 align="center">OffensiveBoar</h2>
   <p align="center">Find leaked credentials.</p>
 </p>
-
----
-
-<div align="center">
-
-[![Go Report Card](https://goreportcard.com/badge/github.com/etyvrox/offensiveboar/v3)](https://goreportcard.com/report/github.com/etyvrox/offensiveboar/v3)
-[![License](https://img.shields.io/badge/license-AGPL--3.0-brightgreen)](/LICENSE)
-[![Total Detectors](https://img.shields.io/github/directory-file-count/etyvrox/offensiveboar/pkg/detectors?label=Total%20Detectors&type=dir)](/pkg/detectors)
-
-</div>
 
 ---
 
@@ -104,44 +93,6 @@ offensiveboar s3 --bucket=<bucket name> --results=verified,unknown
 ```
 
 # :floppy_disk: Installation
-
-### MacOS users
-
-```bash
-brew install offensiveboar
-```
-
-### Docker:
-
-#### Unix
-
-```bash
-docker run --rm -it -v "$PWD:/pwd" etyvrox/offensiveboar:latest github --repo https://github.com/your-org/your-repo
-```
-
-#### Windows Command Prompt
-
-```bash
-docker run --rm -it -v "%cd:/=\%:/pwd" etyvrox/offensiveboar:latest github --repo https://github.com/your-org/your-repo
-```
-
-#### Windows PowerShell
-
-```bash
-docker run --rm -it -v "${PWD}:/pwd" etyvrox/offensiveboar github --repo https://github.com/your-org/your-repo
-```
-
-#### M1 and M2 Mac
-
-```bash
-docker run --platform linux/arm64 --rm -it -v "$PWD:/pwd" etyvrox/offensiveboar:latest github --repo https://github.com/your-org/your-repo
-```
-
-### Binary releases
-
-```bash
-Download and unpack from https://github.com/etyvrox/offensiveboar/releases
-```
 
 ### Compile from source
 

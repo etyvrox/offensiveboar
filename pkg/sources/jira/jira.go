@@ -1,6 +1,7 @@
 package jira
 
 import (
+	"bytes"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
@@ -31,11 +32,11 @@ type Source struct {
 	verify   bool
 	log      logr.Logger
 
-	endpoint        string
-	token           string
-	email           string
-	isCloud         bool
-	useBasicAuth    bool
+	endpoint     string
+	token        string
+	email        string
+	isCloud      bool
+	useBasicAuth bool
 
 	httpClient *http.Client
 	mu         sync.Mutex
@@ -73,7 +74,7 @@ func (s *Source) Init(aCtx context.Context, name string, jobId sources.JobID, so
 	}
 
 	s.endpoint = strings.TrimSuffix(conn.Endpoint, "/")
-	
+
 	// Determine installation type
 	installationType := conn.GetInstallationType()
 	if installationType == sourcespb.JiraInstallationType_JIRA_INSTALLATION_TYPE_AUTODETECT {
@@ -179,7 +180,7 @@ func (s *Source) fetchIssues(ctx context.Context, projectKey string) ([]JiraIssu
 	if s.isCloud {
 		return s.fetchIssuesV3POST(ctx, projectKey)
 	}
-	
+
 	// Jira Server/DC: use v2 search endpoint with GET
 	var allIssues []JiraIssue
 	startAt := 0
@@ -237,22 +238,22 @@ func (s *Source) fetchIssuesV3POST(ctx context.Context, projectKey string) ([]Ji
 
 	for {
 		jql := fmt.Sprintf("project=%s ORDER BY id ASC", projectKey)
-		
-		// Jira Cloud API v3 uses POST with JSON body
+
+		// Jira Cloud API v3 uses POST with JSON body to /rest/api/3/search
 		requestBody := map[string]interface{}{
 			"jql":        jql,
 			"maxResults": maxResults,
 			"startAt":    startAt,
 			"fields":     []string{"summary", "description", "comment"},
 		}
-		
+
 		jsonBody, err := json.Marshal(requestBody)
 		if err != nil {
 			return nil, err
 		}
 
-		apiURL := fmt.Sprintf("%s/rest/api/3/search/jql", s.endpoint)
-		req, err := http.NewRequestWithContext(ctx, "POST", apiURL, strings.NewReader(string(jsonBody)))
+		apiURL := fmt.Sprintf("%s/rest/api/3/search", s.endpoint)
+		req, err := http.NewRequestWithContext(ctx, "POST", apiURL, bytes.NewReader(jsonBody))
 		if err != nil {
 			return nil, err
 		}
@@ -334,7 +335,7 @@ func (s *Source) buildIssueContent(issue JiraIssue) string {
 // extractTextFromADF extracts text from Atlassian Document Format (ADF)
 func extractTextFromADF(adf map[string]interface{}) (string, error) {
 	var text strings.Builder
-	
+
 	if content, ok := adf["content"].([]interface{}); ok {
 		for _, node := range content {
 			if nodeMap, ok := node.(map[string]interface{}); ok {
@@ -354,7 +355,7 @@ func extractTextFromADF(adf map[string]interface{}) (string, error) {
 			}
 		}
 	}
-	
+
 	return text.String(), nil
 }
 

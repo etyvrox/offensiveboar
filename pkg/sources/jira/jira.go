@@ -175,6 +175,12 @@ func (s *Source) fetchProjects(ctx context.Context) ([]JiraProject, error) {
 
 // fetchIssues fetches all issues for a project with pagination
 func (s *Source) fetchIssues(ctx context.Context, projectKey string) ([]JiraIssue, error) {
+	// Jira Cloud requires POST with v3 API, Server/DC uses GET with v2 API
+	if s.isCloud {
+		return s.fetchIssuesV3POST(ctx, projectKey)
+	}
+	
+	// Jira Server/DC: use v2 search endpoint with GET
 	var allIssues []JiraIssue
 	startAt := 0
 	maxResults := 50
@@ -189,15 +195,8 @@ func (s *Source) fetchIssues(ctx context.Context, projectKey string) ([]JiraIssu
 			return nil, err
 		}
 
-		// Set authentication header based on installation type
-		if s.useBasicAuth {
-			// Jira Cloud: Basic Auth with email:token
-			auth := base64.StdEncoding.EncodeToString([]byte(fmt.Sprintf("%s:%s", s.email, s.token)))
-			req.Header.Set("Authorization", fmt.Sprintf("Basic %s", auth))
-		} else {
-			// Jira Server/DC: Bearer token
-			req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", s.token))
-		}
+		// Jira Server/DC: Bearer token
+		req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", s.token))
 		req.Header.Set("Accept", "application/json")
 
 		resp, err := s.httpClient.Do(req)
@@ -209,6 +208,70 @@ func (s *Source) fetchIssues(ctx context.Context, projectKey string) ([]JiraIssu
 			body, _ := io.ReadAll(resp.Body)
 			resp.Body.Close()
 			return nil, fmt.Errorf("failed to fetch issues: status %d, body: %s", resp.StatusCode, string(body))
+		}
+
+		var searchResp JiraSearchResponse
+		if err := json.NewDecoder(resp.Body).Decode(&searchResp); err != nil {
+			resp.Body.Close()
+			return nil, err
+		}
+		resp.Body.Close()
+
+		allIssues = append(allIssues, searchResp.Issues...)
+
+		if len(searchResp.Issues) < maxResults || startAt+maxResults >= searchResp.Total {
+			break
+		}
+
+		startAt += maxResults
+	}
+
+	return allIssues, nil
+}
+
+// fetchIssuesV3POST fetches issues using POST method for Jira Cloud API v3
+func (s *Source) fetchIssuesV3POST(ctx context.Context, projectKey string) ([]JiraIssue, error) {
+	var allIssues []JiraIssue
+	startAt := 0
+	maxResults := 50
+
+	for {
+		jql := fmt.Sprintf("project=%s ORDER BY id ASC", projectKey)
+		
+		// Jira Cloud API v3 uses POST with JSON body
+		requestBody := map[string]interface{}{
+			"jql":        jql,
+			"maxResults": maxResults,
+			"startAt":    startAt,
+			"fields":     []string{"summary", "description", "comment"},
+		}
+		
+		jsonBody, err := json.Marshal(requestBody)
+		if err != nil {
+			return nil, err
+		}
+
+		apiURL := fmt.Sprintf("%s/rest/api/3/search/jql", s.endpoint)
+		req, err := http.NewRequestWithContext(ctx, "POST", apiURL, strings.NewReader(string(jsonBody)))
+		if err != nil {
+			return nil, err
+		}
+
+		// Set authentication header
+		auth := base64.StdEncoding.EncodeToString([]byte(fmt.Sprintf("%s:%s", s.email, s.token)))
+		req.Header.Set("Authorization", fmt.Sprintf("Basic %s", auth))
+		req.Header.Set("Accept", "application/json")
+		req.Header.Set("Content-Type", "application/json")
+
+		resp, err := s.httpClient.Do(req)
+		if err != nil {
+			return nil, err
+		}
+
+		if resp.StatusCode != http.StatusOK {
+			body, _ := io.ReadAll(resp.Body)
+			resp.Body.Close()
+			return nil, fmt.Errorf("failed to fetch issues (v3 POST): status %d, body: %s", resp.StatusCode, string(body))
 		}
 
 		var searchResp JiraSearchResponse

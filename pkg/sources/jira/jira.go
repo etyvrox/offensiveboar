@@ -1,7 +1,6 @@
 package jira
 
 import (
-	"bytes"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
@@ -230,7 +229,7 @@ func (s *Source) fetchIssues(ctx context.Context, projectKey string) ([]JiraIssu
 	return allIssues, nil
 }
 
-// fetchIssuesV3POST fetches issues using POST method for Jira Cloud API v3
+// fetchIssuesV3POST fetches issues using GET method for Jira Cloud API v3
 func (s *Source) fetchIssuesV3POST(ctx context.Context, projectKey string) ([]JiraIssue, error) {
 	var allIssues []JiraIssue
 	startAt := 0
@@ -239,21 +238,16 @@ func (s *Source) fetchIssuesV3POST(ctx context.Context, projectKey string) ([]Ji
 	for {
 		jql := fmt.Sprintf("project=%s ORDER BY id ASC", projectKey)
 
-		// Jira Cloud API v3 uses POST with JSON body to /rest/api/3/search
-		requestBody := map[string]interface{}{
-			"jql":        jql,
-			"maxResults": maxResults,
-			"startAt":    startAt,
-			"fields":     []string{"summary", "description", "comment"},
-		}
+		// Jira Cloud API v3 uses GET with query parameters
+		// Format: /rest/api/3/search?jql=...&startAt=...&maxResults=...&fields=...
+		params := url.Values{}
+		params.Set("jql", jql)
+		params.Set("startAt", fmt.Sprintf("%d", startAt))
+		params.Set("maxResults", fmt.Sprintf("%d", maxResults))
+		params.Set("fields", "summary,description,comment")
 
-		jsonBody, err := json.Marshal(requestBody)
-		if err != nil {
-			return nil, err
-		}
-
-		apiURL := fmt.Sprintf("%s/rest/api/3/search", s.endpoint)
-		req, err := http.NewRequestWithContext(ctx, "POST", apiURL, bytes.NewReader(jsonBody))
+		apiURL := fmt.Sprintf("%s/rest/api/3/search?%s", s.endpoint, params.Encode())
+		req, err := http.NewRequestWithContext(ctx, "GET", apiURL, nil)
 		if err != nil {
 			return nil, err
 		}
@@ -262,7 +256,6 @@ func (s *Source) fetchIssuesV3POST(ctx context.Context, projectKey string) ([]Ji
 		auth := base64.StdEncoding.EncodeToString([]byte(fmt.Sprintf("%s:%s", s.email, s.token)))
 		req.Header.Set("Authorization", fmt.Sprintf("Basic %s", auth))
 		req.Header.Set("Accept", "application/json")
-		req.Header.Set("Content-Type", "application/json")
 
 		resp, err := s.httpClient.Do(req)
 		if err != nil {
@@ -272,7 +265,7 @@ func (s *Source) fetchIssuesV3POST(ctx context.Context, projectKey string) ([]Ji
 		if resp.StatusCode != http.StatusOK {
 			body, _ := io.ReadAll(resp.Body)
 			resp.Body.Close()
-			return nil, fmt.Errorf("failed to fetch issues (v3 POST): status %d, body: %s", resp.StatusCode, string(body))
+			return nil, fmt.Errorf("failed to fetch issues (v3 GET): status %d, body: %s", resp.StatusCode, string(body))
 		}
 
 		var searchResp JiraSearchResponse

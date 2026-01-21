@@ -393,10 +393,15 @@ type FilesystemConfig struct {
 
 // S3Config defines the optional configuration for an S3 source.
 type JiraConfig struct {
-	// URL is the Jira instance URL (e.g., https://jira.example.com).
+	// URL is the Jira instance URL (e.g., https://jira.example.com or https://your-domain.atlassian.net).
 	URL string
-	// Token is the Jira API token for authentication (Bearer token).
+	// Token is the Jira API token for authentication.
+	// For Jira Cloud: use with Email for Basic Auth (email:token).
+	// For Jira Server/DC: use as Bearer token.
 	Token string
+	// Email is required for Jira Cloud authentication (Basic Auth with email:token).
+	// Optional for Jira Server/Data Center.
+	Email string
 }
 
 type S3Config struct {

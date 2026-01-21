@@ -1,6 +1,7 @@
 package jira
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -30,8 +31,11 @@ type Source struct {
 	verify   bool
 	log      logr.Logger
 
-	endpoint string
-	token    string
+	endpoint        string
+	token           string
+	email           string
+	isCloud         bool
+	useBasicAuth    bool
 
 	httpClient *http.Client
 	mu         sync.Mutex
@@ -69,13 +73,41 @@ func (s *Source) Init(aCtx context.Context, name string, jobId sources.JobID, so
 	}
 
 	s.endpoint = strings.TrimSuffix(conn.Endpoint, "/")
-	s.token = conn.GetToken()
+	
+	// Determine installation type
+	installationType := conn.GetInstallationType()
+	if installationType == sourcespb.JiraInstallationType_JIRA_INSTALLATION_TYPE_AUTODETECT {
+		// Auto-detect: check if URL contains .atlassian.net
+		if strings.Contains(s.endpoint, ".atlassian.net") {
+			s.isCloud = true
+		}
+	} else if installationType == sourcespb.JiraInstallationType_JIRA_INSTALLATION_TYPE_CLOUD {
+		s.isCloud = true
+	}
+
+	// Handle authentication based on credential type
+	if basicAuth := conn.GetBasicAuth(); basicAuth != nil {
+		// Jira Cloud: Basic Auth with email:token
+		s.email = basicAuth.Username
+		s.token = basicAuth.Password
+		s.useBasicAuth = true
+		s.isCloud = true
+	} else if token := conn.GetToken(); token != "" {
+		// Jira Server/DC: Bearer token
+		s.token = token
+		s.useBasicAuth = false
+	} else {
+		return errors.New("Jira authentication credentials are required (token or basic auth)")
+	}
 
 	if s.endpoint == "" {
 		return errors.New("Jira endpoint is required")
 	}
 	if s.token == "" {
 		return errors.New("Jira token is required")
+	}
+	if s.isCloud && s.useBasicAuth && s.email == "" {
+		return errors.New("Jira Cloud requires email address for Basic Auth")
 	}
 
 	s.httpClient = &http.Client{}
@@ -111,7 +143,15 @@ func (s *Source) fetchProjects(ctx context.Context) ([]JiraProject, error) {
 		return nil, err
 	}
 
-	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", s.token))
+	// Set authentication header based on installation type
+	if s.useBasicAuth {
+		// Jira Cloud: Basic Auth with email:token
+		auth := base64.StdEncoding.EncodeToString([]byte(fmt.Sprintf("%s:%s", s.email, s.token)))
+		req.Header.Set("Authorization", fmt.Sprintf("Basic %s", auth))
+	} else {
+		// Jira Server/DC: Bearer token
+		req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", s.token))
+	}
 	req.Header.Set("Accept", "application/json")
 
 	resp, err := s.httpClient.Do(req)
@@ -149,7 +189,15 @@ func (s *Source) fetchIssues(ctx context.Context, projectKey string) ([]JiraIssu
 			return nil, err
 		}
 
-		req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", s.token))
+		// Set authentication header based on installation type
+		if s.useBasicAuth {
+			// Jira Cloud: Basic Auth with email:token
+			auth := base64.StdEncoding.EncodeToString([]byte(fmt.Sprintf("%s:%s", s.email, s.token)))
+			req.Header.Set("Authorization", fmt.Sprintf("Basic %s", auth))
+		} else {
+			// Jira Server/DC: Bearer token
+			req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", s.token))
+		}
 		req.Header.Set("Accept", "application/json")
 
 		resp, err := s.httpClient.Do(req)

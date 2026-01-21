@@ -165,8 +165,9 @@ var (
 	filesystemScanExcludePaths = filesystemScan.Flag("exclude-paths", "Path to file with newline separated regexes for files to exclude in scan.").Short('x').String()
 
 	jiraScan     = cli.Command("jira", "Find credentials in Jira issues.")
-	jiraURL      = jiraScan.Flag("jira-url", "Jira instance URL (e.g., https://jira.example.com).").Required().String()
-	jiraToken    = jiraScan.Flag("jira-token", "Jira API token for authentication (Bearer token).").Required().String()
+	jiraURL      = jiraScan.Flag("jira-url", "Jira instance URL (e.g., https://jira.example.com or https://your-domain.atlassian.net).").Required().String()
+	jiraToken    = jiraScan.Flag("jira-token", "Jira API token for authentication. For Cloud: use with --jira-email. For Server/DC: use as Bearer token.").Required().String()
+	jiraEmail    = jiraScan.Flag("jira-email", "Email address for Jira Cloud authentication (required for Cloud, optional for Server/DC).").String()
 
 	s3Scan              = cli.Command("s3", "Find credentials in S3 buckets.")
 	s3ScanKey           = s3Scan.Flag("key", "S3 key used to authenticate. Can be provided with environment variable AWS_ACCESS_KEY_ID.").Envar("AWS_ACCESS_KEY_ID").String()
@@ -907,6 +908,7 @@ func runSingleScan(ctx context.Context, cmd string, cfg engine.Config) (metrics,
 		cfg := sources.JiraConfig{
 			URL:   *jiraURL,
 			Token: *jiraToken,
+			Email: *jiraEmail,
 		}
 		if ref, err := eng.ScanJira(ctx, cfg); err != nil {
 			return scanMetrics, fmt.Errorf("failed to scan Jira: %v", err)
@@ -1158,7 +1160,6 @@ func runSingleScan(ctx context.Context, cmd string, cfg engine.Config) (metrics,
 // parseResults ensures that users provide valid CSV input to `--results`.
 //
 // This is a work-around to kingpin not supporting CSVs.
-// See: https://github.com/etyvrox/offensiveboar/pull/2372#issuecomment-1983868917
 func parseResults(input *string) (map[string]struct{}, error) {
 	if *input == "" {
 		return nil, nil

@@ -38,14 +38,21 @@ offensiveboar filesystem /path/to/scan --custom-languages en,ru
 
 ### 🎫 Jira Integration
 OffensiveBoar can now scan Jira issues for leaked credentials:
+- **Supports both Jira Cloud and Jira Server/Data Center**
 - Scans all projects in your Jira instance
 - Analyzes all issues, including summaries, descriptions, and comments
 - Supports both plain text and ADF (Atlassian Document Format) content
 - Provides direct links back to the Jira issues where secrets were found
+- Automatically detects installation type (Cloud vs Server/DC) based on URL
 
-Example usage:
+**Jira Cloud example:**
 ```bash
-offensiveboar jira --jira-url https://your-jira-instance.com --jira-token YOUR_TOKEN --custom-languages en,ru
+offensiveboar jira --jira-url https://your-domain.atlassian.net --jira-email your-email@example.com --jira-token YOUR_API_TOKEN --custom-languages en,ru
+```
+
+**Jira Server/Data Center example:**
+```bash
+offensiveboar jira --jira-url https://your-jira-instance.com --jira-token YOUR_BEARER_TOKEN --custom-languages en,ru
 ```
 
 ### 🔐 Enhanced Token Detection
@@ -70,8 +77,14 @@ offensiveboar github --org=your-org --results=verified
 
 ## 3: Scan Jira issues
 
+**Jira Cloud:**
 ```bash
-offensiveboar jira --jira-url https://your-jira.com --jira-token YOUR_TOKEN --custom-languages en,ru
+offensiveboar jira --jira-url https://your-domain.atlassian.net --jira-email your-email@example.com --jira-token YOUR_API_TOKEN --custom-languages en,ru
+```
+
+**Jira Server/Data Center:**
+```bash
+offensiveboar jira --jira-url https://your-jira.com --jira-token YOUR_BEARER_TOKEN --custom-languages en,ru
 ```
 
 ## 4: Scan filesystem with multi-language support
@@ -151,23 +164,50 @@ offensiveboar filesystem --help
 
 ## Jira Scanning
 
-Scan all issues in your Jira instance:
+OffensiveBoar supports both **Jira Cloud** and **Jira Server/Data Center** instances.
+
+### Jira Cloud
+
+For Jira Cloud instances (URLs ending with `.atlassian.net`), you need to provide your email and API token:
 
 ```bash
-offensiveboar jira --jira-url https://your-jira-instance.com --jira-token YOUR_API_TOKEN
+offensiveboar jira --jira-url https://your-domain.atlassian.net --jira-email your-email@example.com --jira-token YOUR_API_TOKEN
 ```
 
-With multi-language support:
+**Getting a Jira Cloud API token:**
+1. Go to https://id.atlassian.com/manage-profile/security/api-tokens
+2. Click "Create API token"
+3. Copy the token and use it with your email address
+
+### Jira Server/Data Center
+
+For on-premise Jira instances, use a Bearer token:
 
 ```bash
-offensiveboar jira --jira-url https://your-jira-instance.com --jira-token YOUR_API_TOKEN --custom-languages en,ru
+offensiveboar jira --jira-url https://your-jira-instance.com --jira-token YOUR_BEARER_TOKEN
 ```
+
+### With Multi-Language Support
+
+Both Cloud and Server support multi-language detection:
+
+```bash
+# Cloud
+offensiveboar jira --jira-url https://your-domain.atlassian.net --jira-email your-email@example.com --jira-token YOUR_API_TOKEN --custom-languages en,ru
+
+# Server/DC
+offensiveboar jira --jira-url https://your-jira-instance.com --jira-token YOUR_BEARER_TOKEN --custom-languages en,ru
+```
+
+### How It Works
 
 The tool will:
-1. Fetch all projects from your Jira instance
-2. Retrieve all issues for each project
-3. Scan issue summaries, descriptions, and comments
-4. Report any found secrets with links back to the Jira issues
+1. Automatically detect installation type (Cloud vs Server/DC) based on URL
+2. Use appropriate authentication method (Basic Auth for Cloud, Bearer for Server/DC)
+3. Fetch all projects from your Jira instance
+4. Retrieve all issues for each project with pagination
+5. Scan issue summaries, descriptions, and comments (including ADF format)
+6. Report any found secrets with direct links back to the Jira issues
 
 ## Multi-Language Secret Detection
 
@@ -201,7 +241,12 @@ Supported language codes: `en`, `ru`, `es`, `fr`, `de`, `it`, `pt`, `ja`, `zh`, 
   - Use the `--custom-languages` flag with comma-separated language codes. Example: `--custom-languages en,ru`
 
 - **What Jira permissions do I need?**
-  - Your Jira API token needs permissions to read projects and issues. Typically, this requires "Browse Projects" and "View Issues" permissions.
+  - **Jira Cloud**: Your API token needs permissions to read projects and issues. The user account associated with the email must have "Browse Projects" and "View Issues" permissions.
+  - **Jira Server/DC**: Your Bearer token must have permissions to access the REST API and read projects/issues.
+- **How do I know if I'm using Cloud or Server/DC?**
+  - Cloud URLs typically end with `.atlassian.net` (e.g., `https://yourcompany.atlassian.net`)
+  - Server/DC URLs are usually custom domains (e.g., `https://jira.yourcompany.com`)
+  - OffensiveBoar automatically detects the type, but you can explicitly specify it if needed
 
 # :newspaper: What's New in This Fork
 

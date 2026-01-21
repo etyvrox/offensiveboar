@@ -5,6 +5,7 @@ dist
 
 # binary
 trufflehog
+offensiveboar
 tmp/go-test.json
 .captain/detectors/timings.yaml
 .captain/detectors/quarantines.yaml

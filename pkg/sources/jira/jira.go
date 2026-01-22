@@ -137,7 +137,13 @@ type JiraSearchResponse struct {
 
 // fetchProjects fetches all projects from Jira
 func (s *Source) fetchProjects(ctx context.Context) ([]JiraProject, error) {
-	url := fmt.Sprintf("%s/rest/api/2/project", s.endpoint)
+	// Use API v3 for Cloud, v2 for Server/DC
+	apiVersion := "2"
+	if s.isCloud {
+		apiVersion = "3"
+	}
+	
+	url := fmt.Sprintf("%s/rest/api/%s/project", s.endpoint, apiVersion)
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 	if err != nil {
 		return nil, err
@@ -175,9 +181,9 @@ func (s *Source) fetchProjects(ctx context.Context) ([]JiraProject, error) {
 
 // fetchIssues fetches all issues for a project with pagination
 func (s *Source) fetchIssues(ctx context.Context, projectKey string) ([]JiraIssue, error) {
-	// Jira Cloud requires POST with v3 API, Server/DC uses GET with v2 API
+	// Jira Cloud uses v3 API with /rest/api/3/search/jql, Server/DC uses GET with v2 API
 	if s.isCloud {
-		return s.fetchIssuesV3POST(ctx, projectKey)
+		return s.fetchIssuesV3GET(ctx, projectKey)
 	}
 
 	// Jira Server/DC: use v2 search endpoint with GET
@@ -229,8 +235,8 @@ func (s *Source) fetchIssues(ctx context.Context, projectKey string) ([]JiraIssu
 	return allIssues, nil
 }
 
-// fetchIssuesV3POST fetches issues using GET method for Jira Cloud API v3
-func (s *Source) fetchIssuesV3POST(ctx context.Context, projectKey string) ([]JiraIssue, error) {
+// fetchIssuesV3GET fetches issues using GET method for Jira Cloud API v3
+func (s *Source) fetchIssuesV3GET(ctx context.Context, projectKey string) ([]JiraIssue, error) {
 	var allIssues []JiraIssue
 	startAt := 0
 	maxResults := 50
@@ -238,15 +244,15 @@ func (s *Source) fetchIssuesV3POST(ctx context.Context, projectKey string) ([]Ji
 	for {
 		jql := fmt.Sprintf("project=%s ORDER BY id ASC", projectKey)
 
-		// Jira Cloud API v3 uses GET with query parameters
-		// Format: /rest/api/3/search?jql=...&startAt=...&maxResults=...&fields=...
+		// Jira Cloud API v3 uses /rest/api/3/search/jql with query parameters
+		// Format: /rest/api/3/search/jql?jql=...&startAt=...&maxResults=...&fields=...
 		params := url.Values{}
 		params.Set("jql", jql)
 		params.Set("startAt", fmt.Sprintf("%d", startAt))
 		params.Set("maxResults", fmt.Sprintf("%d", maxResults))
 		params.Set("fields", "summary,description,comment")
 
-		apiURL := fmt.Sprintf("%s/rest/api/3/search?%s", s.endpoint, params.Encode())
+		apiURL := fmt.Sprintf("%s/rest/api/3/search/jql?%s", s.endpoint, params.Encode())
 		req, err := http.NewRequestWithContext(ctx, "GET", apiURL, nil)
 		if err != nil {
 			return nil, err

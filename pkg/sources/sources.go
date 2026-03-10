@@ -391,17 +391,23 @@ type FilesystemConfig struct {
 	ExcludePathsFile string
 }
 
-// S3Config defines the optional configuration for an S3 source.
+// JiraConfig defines the optional configuration for a Jira source.
 type JiraConfig struct {
 	// URL is the Jira instance URL (e.g., https://jira.example.com or https://your-domain.atlassian.net).
 	URL string
-	// Token is the Jira API token for authentication.
-	// For Jira Cloud: use with Email for Basic Auth (email:token).
-	// For Jira Server/DC: use as Bearer token.
+	// Token is the Jira API token.
+	// For Jira Cloud: use with Email (Basic Auth as email:token).
+	// For Jira Server/DC: use as a Bearer token or PAT.
 	Token string
-	// Email is required for Jira Cloud authentication (Basic Auth with email:token).
-	// Optional for Jira Server/Data Center.
+	// Email is required for Jira Cloud authentication (Basic Auth uses email:token).
 	Email string
+	// Username is the Jira username for Basic Auth on on-prem Server/Data Center.
+	// Use with Password. Mutually exclusive with Email+Token (Cloud).
+	Username string
+	// Password is the Jira password for Basic Auth on on-prem Server/Data Center.
+	Password string
+	// ThrottleRPS is the maximum number of API requests per second. 0 = unlimited.
+	ThrottleRPS float64
 }
 
 type S3Config struct {
@@ -564,9 +570,8 @@ func (p *Progress) GetProgress() *Progress {
 // manager executes scans this way under certain circumstances.
 //
 // Usage:
-//  - id should be the SourceUnit ID
-//  - value is opaque data each Source uses
-//
+//   - id should be the SourceUnit ID
+//   - value is opaque data each Source uses
 
 // GetEncodedResumeInfoFor gets the encoded resume information for the provided
 // ID, usually a unit ID.

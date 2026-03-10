@@ -1,7 +1,6 @@
 package jira
 
 import (
-	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -12,6 +11,7 @@ import (
 
 	"github.com/go-errors/errors"
 	"github.com/go-logr/logr"
+	"golang.org/x/time/rate"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
 
@@ -31,14 +31,21 @@ type Source struct {
 	verify   bool
 	log      logr.Logger
 
-	endpoint     string
-	token        string
-	email        string
-	isCloud      bool
-	useBasicAuth bool
+	endpoint string
+	// isCloud is true when the target is Jira Cloud (*.atlassian.net).
+	// Cloud uses API v3 and Basic Auth as email:token.
+	isCloud bool
+	// token holds the API token (Cloud) or PAT/Bearer token (Server/DC).
+	token string
+	// email is used only for Jira Cloud Basic Auth (email:token).
+	email string
+	// username and password are used for Basic Auth on on-prem Server/DC instances.
+	username string
+	password string
 
-	httpClient *http.Client
-	mu         sync.Mutex
+	rateLimiter *rate.Limiter
+	httpClient  *http.Client
+	mu          sync.Mutex
 
 	sources.Progress
 	sources.CommonSourceUnitUnmarshaller
@@ -60,6 +67,20 @@ func (s *Source) JobID() sources.JobID {
 	return s.jobId
 }
 
+// SetThrottle configures a rate limiter capping requests to rps per second.
+// Call after Init and before scanning begins. rps <= 0 disables throttling.
+func (s *Source) SetThrottle(rps float64) {
+	if rps <= 0 {
+		s.rateLimiter = nil
+		return
+	}
+	burst := int(rps)
+	if burst < 1 {
+		burst = 1
+	}
+	s.rateLimiter = rate.NewLimiter(rate.Limit(rps), burst)
+}
+
 func (s *Source) Init(aCtx context.Context, name string, jobId sources.JobID, sourceId sources.SourceID, verify bool, connection *anypb.Any, _ int) error {
 	s.name = name
 	s.jobId = jobId
@@ -73,46 +94,80 @@ func (s *Source) Init(aCtx context.Context, name string, jobId sources.JobID, so
 	}
 
 	s.endpoint = strings.TrimSuffix(conn.Endpoint, "/")
-
-	// Determine installation type
-	installationType := conn.GetInstallationType()
-	if installationType == sourcespb.JiraInstallationType_JIRA_INSTALLATION_TYPE_AUTODETECT {
-		// Auto-detect: check if URL contains .atlassian.net
-		if strings.Contains(s.endpoint, ".atlassian.net") {
-			s.isCloud = true
-		}
-	} else if installationType == sourcespb.JiraInstallationType_JIRA_INSTALLATION_TYPE_CLOUD {
-		s.isCloud = true
-	}
-
-	// Handle authentication based on credential type
-	if basicAuth := conn.GetBasicAuth(); basicAuth != nil {
-		// Jira Cloud: Basic Auth with email:token
-		s.email = basicAuth.Username
-		s.token = basicAuth.Password
-		s.useBasicAuth = true
-		s.isCloud = true
-	} else if token := conn.GetToken(); token != "" {
-		// Jira Server/DC: Bearer token
-		s.token = token
-		s.useBasicAuth = false
-	} else {
-		return errors.New("Jira authentication credentials are required (token or basic auth)")
-	}
-
 	if s.endpoint == "" {
 		return errors.New("Jira endpoint is required")
 	}
-	if s.token == "" {
-		return errors.New("Jira token is required")
+
+	// Detect installation type: explicit setting or URL heuristic.
+	installationType := conn.GetInstallationType()
+	if installationType == sourcespb.JiraInstallationType_JIRA_INSTALLATION_TYPE_CLOUD {
+		s.isCloud = true
+	} else if installationType == sourcespb.JiraInstallationType_JIRA_INSTALLATION_TYPE_AUTODETECT {
+		s.isCloud = strings.Contains(s.endpoint, ".atlassian.net")
 	}
-	if s.isCloud && s.useBasicAuth && s.email == "" {
-		return errors.New("Jira Cloud requires email address for Basic Auth")
+
+	switch cred := conn.GetCredential().(type) {
+	case *sourcespb.JIRA_BasicAuth:
+		if cred.BasicAuth == nil {
+			return errors.New("Jira basic_auth credential is nil")
+		}
+		if s.isCloud {
+			// Cloud: BasicAuth credential carries email (Username) and API token (Password).
+			s.email = cred.BasicAuth.Username
+			s.token = cred.BasicAuth.Password
+			if s.email == "" || s.token == "" {
+				return errors.New("Jira Cloud requires both email and API token")
+			}
+		} else {
+			// On-prem Server/DC: BasicAuth credential carries username and password.
+			s.username = cred.BasicAuth.Username
+			s.password = cred.BasicAuth.Password
+			if s.username == "" || s.password == "" {
+				return errors.New("Jira Basic Auth requires both username and password")
+			}
+		}
+	case *sourcespb.JIRA_Token:
+		s.token = cred.Token
+		if s.token == "" {
+			return errors.New("Jira token is required")
+		}
+	default:
+		return errors.New("Jira credential must be a token (Bearer) or basic_auth (username+password / email+token)")
 	}
 
 	s.httpClient = &http.Client{}
-
 	return nil
+}
+
+// setAuth applies the correct Authorization header for the current auth mode:
+//   - Jira Cloud: Basic Auth with email:token
+//   - Server/DC Bearer: Authorization: Bearer <token>
+//   - Server/DC Basic: Basic Auth with username:password
+func (s *Source) setAuth(req *http.Request) {
+	if s.isCloud {
+		req.SetBasicAuth(s.email, s.token)
+	} else if s.token != "" {
+		req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", s.token))
+	} else {
+		req.SetBasicAuth(s.username, s.password)
+	}
+}
+
+// throttle waits until the rate limiter allows the next request.
+// It is a no-op when no rate limiter is configured.
+func (s *Source) throttle(ctx context.Context) error {
+	if s.rateLimiter == nil {
+		return nil
+	}
+	return s.rateLimiter.Wait(ctx)
+}
+
+// apiVersion returns the Jira REST API version to use.
+func (s *Source) apiVersion() string {
+	if s.isCloud {
+		return "3"
+	}
+	return "2"
 }
 
 // JiraProject represents a Jira project
@@ -137,27 +192,17 @@ type JiraSearchResponse struct {
 
 // fetchProjects fetches all projects from Jira
 func (s *Source) fetchProjects(ctx context.Context) ([]JiraProject, error) {
-	// Use API v3 for Cloud, v2 for Server/DC
-	apiVersion := "2"
-	if s.isCloud {
-		apiVersion = "3"
+	if err := s.throttle(ctx); err != nil {
+		return nil, err
 	}
-	
-	url := fmt.Sprintf("%s/rest/api/%s/project", s.endpoint, apiVersion)
-	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
+
+	apiURL := fmt.Sprintf("%s/rest/api/%s/project", s.endpoint, s.apiVersion())
+	req, err := http.NewRequestWithContext(ctx, "GET", apiURL, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	// Set authentication header based on installation type
-	if s.useBasicAuth {
-		// Jira Cloud: Basic Auth with email:token
-		auth := base64.StdEncoding.EncodeToString([]byte(fmt.Sprintf("%s:%s", s.email, s.token)))
-		req.Header.Set("Authorization", fmt.Sprintf("Basic %s", auth))
-	} else {
-		// Jira Server/DC: Bearer token
-		req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", s.token))
-	}
+	s.setAuth(req)
 	req.Header.Set("Accept", "application/json")
 
 	resp, err := s.httpClient.Do(req)
@@ -179,30 +224,40 @@ func (s *Source) fetchProjects(ctx context.Context) ([]JiraProject, error) {
 	return projects, nil
 }
 
-// fetchIssues fetches all issues for a project with pagination
+// fetchIssues fetches all issues for a project with pagination.
+// Jira Cloud uses the v3 /search/jql endpoint; Server/DC uses v2 /search.
 func (s *Source) fetchIssues(ctx context.Context, projectKey string) ([]JiraIssue, error) {
-	// Jira Cloud uses v3 API with /rest/api/3/search/jql, Server/DC uses GET with v2 API
-	if s.isCloud {
-		return s.fetchIssuesV3GET(ctx, projectKey)
-	}
-
-	// Jira Server/DC: use v2 search endpoint with GET
 	var allIssues []JiraIssue
 	startAt := 0
 	maxResults := 50
 
 	for {
+		if err := s.throttle(ctx); err != nil {
+			return nil, err
+		}
+
 		jql := fmt.Sprintf("project=%s ORDER BY id ASC", projectKey)
-		apiURL := fmt.Sprintf("%s/rest/api/2/search?jql=%s&fields=summary,description,comment&maxResults=%d&startAt=%d",
-			s.endpoint, url.QueryEscape(jql), maxResults, startAt)
+
+		var apiURL string
+		if s.isCloud {
+			// Cloud API v3 uses /rest/api/3/search/jql
+			params := url.Values{}
+			params.Set("jql", jql)
+			params.Set("startAt", fmt.Sprintf("%d", startAt))
+			params.Set("maxResults", fmt.Sprintf("%d", maxResults))
+			params.Set("fields", "summary,description,comment")
+			apiURL = fmt.Sprintf("%s/rest/api/3/search/jql?%s", s.endpoint, params.Encode())
+		} else {
+			apiURL = fmt.Sprintf("%s/rest/api/2/search?jql=%s&fields=summary,description,comment&maxResults=%d&startAt=%d",
+				s.endpoint, url.QueryEscape(jql), maxResults, startAt)
+		}
 
 		req, err := http.NewRequestWithContext(ctx, "GET", apiURL, nil)
 		if err != nil {
 			return nil, err
 		}
 
-		// Jira Server/DC: Bearer token
-		req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", s.token))
+		s.setAuth(req)
 		req.Header.Set("Accept", "application/json")
 
 		resp, err := s.httpClient.Do(req)
@@ -214,64 +269,6 @@ func (s *Source) fetchIssues(ctx context.Context, projectKey string) ([]JiraIssu
 			body, _ := io.ReadAll(resp.Body)
 			resp.Body.Close()
 			return nil, fmt.Errorf("failed to fetch issues: status %d, body: %s", resp.StatusCode, string(body))
-		}
-
-		var searchResp JiraSearchResponse
-		if err := json.NewDecoder(resp.Body).Decode(&searchResp); err != nil {
-			resp.Body.Close()
-			return nil, err
-		}
-		resp.Body.Close()
-
-		allIssues = append(allIssues, searchResp.Issues...)
-
-		if len(searchResp.Issues) < maxResults || startAt+maxResults >= searchResp.Total {
-			break
-		}
-
-		startAt += maxResults
-	}
-
-	return allIssues, nil
-}
-
-// fetchIssuesV3GET fetches issues using GET method for Jira Cloud API v3
-func (s *Source) fetchIssuesV3GET(ctx context.Context, projectKey string) ([]JiraIssue, error) {
-	var allIssues []JiraIssue
-	startAt := 0
-	maxResults := 50
-
-	for {
-		jql := fmt.Sprintf("project=%s ORDER BY id ASC", projectKey)
-
-		// Jira Cloud API v3 uses /rest/api/3/search/jql with query parameters
-		// Format: /rest/api/3/search/jql?jql=...&startAt=...&maxResults=...&fields=...
-		params := url.Values{}
-		params.Set("jql", jql)
-		params.Set("startAt", fmt.Sprintf("%d", startAt))
-		params.Set("maxResults", fmt.Sprintf("%d", maxResults))
-		params.Set("fields", "summary,description,comment")
-
-		apiURL := fmt.Sprintf("%s/rest/api/3/search/jql?%s", s.endpoint, params.Encode())
-		req, err := http.NewRequestWithContext(ctx, "GET", apiURL, nil)
-		if err != nil {
-			return nil, err
-		}
-
-		// Set authentication header
-		auth := base64.StdEncoding.EncodeToString([]byte(fmt.Sprintf("%s:%s", s.email, s.token)))
-		req.Header.Set("Authorization", fmt.Sprintf("Basic %s", auth))
-		req.Header.Set("Accept", "application/json")
-
-		resp, err := s.httpClient.Do(req)
-		if err != nil {
-			return nil, err
-		}
-
-		if resp.StatusCode != http.StatusOK {
-			body, _ := io.ReadAll(resp.Body)
-			resp.Body.Close()
-			return nil, fmt.Errorf("failed to fetch issues (v3 GET): status %d, body: %s", resp.StatusCode, string(body))
 		}
 
 		var searchResp JiraSearchResponse

@@ -166,8 +166,11 @@ var (
 
 	jiraScan     = cli.Command("jira", "Find credentials in Jira issues.")
 	jiraURL      = jiraScan.Flag("jira-url", "Jira instance URL (e.g., https://jira.example.com or https://your-domain.atlassian.net).").Required().String()
-	jiraToken    = jiraScan.Flag("jira-token", "Jira API token for authentication. For Cloud: use with --jira-email. For Server/DC: use as Bearer token.").Required().String()
-	jiraEmail    = jiraScan.Flag("jira-email", "Email address for Jira Cloud authentication (required for Cloud, optional for Server/DC).").String()
+	jiraToken    = jiraScan.Flag("jira-token", "Jira API token. Cloud: use with --jira-email. Server/DC: used as Bearer token/PAT.").String()
+	jiraEmail    = jiraScan.Flag("jira-email", "Email for Jira Cloud Basic Auth (email:token). Required for Cloud instances.").String()
+	jiraUsername = jiraScan.Flag("jira-username", "Username for Basic Auth on on-prem Server/DC. Use with --jira-password.").String()
+	jiraPassword = jiraScan.Flag("jira-password", "Password for Basic Auth on on-prem Server/DC. Use with --jira-username.").String()
+	jiraThrottle = jiraScan.Flag("jira-throttle", "Request rate limit: unlimited, 10rps, 5rps, 1rps, 30rpm, 10rpm, 1rpm, 1rph, etc.").Default("unlimited").String()
 
 	s3Scan              = cli.Command("s3", "Find credentials in S3 buckets.")
 	s3ScanKey           = s3Scan.Flag("key", "S3 key used to authenticate. Can be provided with environment variable AWS_ACCESS_KEY_ID.").Envar("AWS_ACCESS_KEY_ID").String()
@@ -905,10 +908,24 @@ func runSingleScan(ctx context.Context, cmd string, cfg engine.Config) (metrics,
 			refs = []sources.JobProgressRef{ref}
 		}
 	case jiraScan.FullCommand():
+		isCloud := *jiraEmail != "" || strings.Contains(*jiraURL, ".atlassian.net")
+		switch {
+		case isCloud && (*jiraEmail == "" || *jiraToken == ""):
+			return scanMetrics, fmt.Errorf("Jira Cloud requires both --jira-email and --jira-token")
+		case !isCloud && *jiraToken == "" && (*jiraUsername == "" || *jiraPassword == ""):
+			return scanMetrics, fmt.Errorf("Jira auth required: --jira-token (Bearer) or --jira-username + --jira-password (Basic Auth)")
+		}
+		throttleRPS, err := parseJiraThrottle(*jiraThrottle)
+		if err != nil {
+			return scanMetrics, fmt.Errorf("invalid --jira-throttle: %v", err)
+		}
 		cfg := sources.JiraConfig{
-			URL:   *jiraURL,
-			Token: *jiraToken,
-			Email: *jiraEmail,
+			URL:         *jiraURL,
+			Token:       *jiraToken,
+			Email:       *jiraEmail,
+			Username:    *jiraUsername,
+			Password:    *jiraPassword,
+			ThrottleRPS: throttleRPS,
 		}
 		if ref, err := eng.ScanJira(ctx, cfg); err != nil {
 			return scanMetrics, fmt.Errorf("failed to scan Jira: %v", err)
@@ -1220,6 +1237,37 @@ func printAverageDetectorTime(e *engine.Engine) {
 // validateClonePath ensures that --clone-path, if provided, exists and is a directory.
 // It also verifies that --no-cleanup is only allowed when --clone-path is set.
 // Note: without a custom clone path, repositories are cloned into temporary directories, which should never be retained.
+// parseJiraThrottle converts a human-readable throttle string to requests-per-second.
+// Supported formats: "unlimited" (0), "10rps", "5ps", "30rpm", "1rph".
+// Returns 0 for unlimited.
+func parseJiraThrottle(s string) (float64, error) {
+	s = strings.TrimSpace(strings.ToLower(s))
+	if s == "" || s == "unlimited" || s == "0" {
+		return 0, nil
+	}
+	type suffix struct {
+		tag  string
+		mult float64
+	}
+	// Longest match first so "rps" is not confused with "rpm".
+	for _, sf := range []suffix{
+		{"rps", 1},
+		{"rpm", 1.0 / 60},
+		{"rph", 1.0 / 3600},
+		{"ps", 1},
+	} {
+		if strings.HasSuffix(s, sf.tag) {
+			numStr := strings.TrimSuffix(s, sf.tag)
+			n, err := strconv.ParseFloat(numStr, 64)
+			if err != nil || n <= 0 {
+				return 0, fmt.Errorf("invalid rate %q (example: 10rps, 30rpm, 1rph)", s)
+			}
+			return n * sf.mult, nil
+		}
+	}
+	return 0, fmt.Errorf("unrecognised throttle %q — use: unlimited, 10rps, 5ps, 30rpm, 10rpm, 1rph", s)
+}
+
 func validateClonePath(clonePath string, noCleanup bool) error {
 	if noCleanup && clonePath == "" {
 		return fmt.Errorf("invalid configuration: --no-cleanup can only be used together with --clone-path")

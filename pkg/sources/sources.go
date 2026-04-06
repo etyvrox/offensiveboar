@@ -408,6 +408,8 @@ type JiraConfig struct {
 	Password string
 	// ThrottleRPS is the maximum number of API requests per second. 0 = unlimited.
 	ThrottleRPS float64
+	// Days limits scanning to issues updated within the last N days. 0 = all time.
+	Days int
 }
 
 type S3Config struct {

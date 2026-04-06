@@ -8,6 +8,7 @@ import (
 	"net/url"
 	"strings"
 	"sync"
+	"time"
 
 	"github.com/go-errors/errors"
 	"github.com/go-logr/logr"
@@ -42,6 +43,10 @@ type Source struct {
 	// username and password are used for Basic Auth on on-prem Server/DC instances.
 	username string
 	password string
+
+	// since filters issues and comments to those updated after this time.
+	// Zero value means no filter (all time).
+	since time.Time
 
 	rateLimiter *rate.Limiter
 	httpClient  *http.Client
@@ -79,6 +84,16 @@ func (s *Source) SetThrottle(rps float64) {
 		burst = 1
 	}
 	s.rateLimiter = rate.NewLimiter(rate.Limit(rps), burst)
+}
+
+// SetDays limits scanning to issues (and comments) updated within the last days days.
+// Call after Init and before scanning begins. days <= 0 disables the filter.
+func (s *Source) SetDays(days int) {
+	if days <= 0 {
+		s.since = time.Time{}
+		return
+	}
+	s.since = time.Now().UTC().Add(-time.Duration(days) * 24 * time.Hour)
 }
 
 func (s *Source) Init(aCtx context.Context, name string, jobId sources.JobID, sourceId sources.SourceID, verify bool, connection *anypb.Any, _ int) error {
@@ -236,7 +251,12 @@ func (s *Source) fetchIssues(ctx context.Context, projectKey string) ([]JiraIssu
 			return nil, err
 		}
 
-		jql := fmt.Sprintf("project=%s ORDER BY id ASC", projectKey)
+		jql := fmt.Sprintf("project=%s", projectKey)
+		if !s.since.IsZero() {
+			// Jira JQL accepts dates in yyyy-MM-dd format.
+			jql += fmt.Sprintf(" AND updated >= %q", s.since.Format("2006-01-02"))
+		}
+		jql += " ORDER BY id ASC"
 
 		var apiURL string
 		if s.isCloud {
@@ -308,17 +328,24 @@ func (s *Source) buildIssueContent(issue JiraIssue) string {
 	if commentField, ok := issue.Fields["comment"].(map[string]interface{}); ok {
 		if comments, ok := commentField["comments"].([]interface{}); ok {
 			for _, comment := range comments {
-				if commentMap, ok := comment.(map[string]interface{}); ok {
-					// Body can be a string or an object (ADF format)
-					if body, ok := commentMap["body"].(string); ok {
-						content.WriteString(body)
+				commentMap, ok := comment.(map[string]interface{})
+				if !ok {
+					continue
+				}
+				// Skip comments older than the since cutoff.
+				if !s.since.IsZero() {
+					if !commentUpdatedAfter(commentMap, s.since) {
+						continue
+					}
+				}
+				// Body can be a string or an object (ADF format)
+				if body, ok := commentMap["body"].(string); ok {
+					content.WriteString(body)
+					content.WriteString("\n")
+				} else if bodyObj, ok := commentMap["body"].(map[string]interface{}); ok {
+					if text, err := extractTextFromADF(bodyObj); err == nil && text != "" {
+						content.WriteString(text)
 						content.WriteString("\n")
-					} else if bodyObj, ok := commentMap["body"].(map[string]interface{}); ok {
-						// Try to extract text from ADF format
-						if text, err := extractTextFromADF(bodyObj); err == nil && text != "" {
-							content.WriteString(text)
-							content.WriteString("\n")
-						}
 					}
 				}
 			}
@@ -326,6 +353,33 @@ func (s *Source) buildIssueContent(issue JiraIssue) string {
 	}
 
 	return content.String()
+}
+
+// jiraTimeFormats are the date/time formats Jira uses in its REST responses.
+var jiraTimeFormats = []string{
+	"2006-01-02T15:04:05.999-0700",
+	"2006-01-02T15:04:05.999Z0700",
+	"2006-01-02T15:04:05-0700",
+	time.RFC3339,
+}
+
+// commentUpdatedAfter returns true when the comment's updated (or created)
+// timestamp is at or after cutoff. Returns true on parse failure so the
+// comment is included rather than silently dropped.
+func commentUpdatedAfter(commentMap map[string]interface{}, cutoff time.Time) bool {
+	for _, field := range []string{"updated", "created"} {
+		raw, ok := commentMap[field].(string)
+		if !ok {
+			continue
+		}
+		for _, layout := range jiraTimeFormats {
+			t, err := time.Parse(layout, raw)
+			if err == nil {
+				return !t.Before(cutoff)
+			}
+		}
+	}
+	return true // include on parse failure
 }
 
 // extractTextFromADF extracts text from Atlassian Document Format (ADF)

@@ -79,6 +79,9 @@ func (e *Engine) ScanJira(ctx context.Context, c sources.JiraConfig) (sources.Jo
 	if c.ThrottleRPS > 0 {
 		jiraSource.SetThrottle(c.ThrottleRPS)
 	}
+	if c.Days > 0 {
+		jiraSource.SetDays(c.Days)
+	}
 
 	return e.sourceManager.EnumerateAndScan(ctx, sourceName, jiraSource)
 }

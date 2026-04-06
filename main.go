@@ -171,6 +171,7 @@ var (
 	jiraUsername = jiraScan.Flag("jira-username", "Username for Basic Auth on on-prem Server/DC. Use with --jira-password.").String()
 	jiraPassword = jiraScan.Flag("jira-password", "Password for Basic Auth on on-prem Server/DC. Use with --jira-username.").String()
 	jiraThrottle = jiraScan.Flag("jira-throttle", "Request rate limit: unlimited, 10rps, 5rps, 1rps, 30rpm, 10rpm, 1rpm, 1rph, etc.").Default("unlimited").String()
+	jiraDays     = jiraScan.Flag("days", "Scan only issues and comments updated within the last N days. 0 = all time.").Default("0").Int()
 
 	s3Scan              = cli.Command("s3", "Find credentials in S3 buckets.")
 	s3ScanKey           = s3Scan.Flag("key", "S3 key used to authenticate. Can be provided with environment variable AWS_ACCESS_KEY_ID.").Envar("AWS_ACCESS_KEY_ID").String()
@@ -926,6 +927,7 @@ func runSingleScan(ctx context.Context, cmd string, cfg engine.Config) (metrics,
 			Username:    *jiraUsername,
 			Password:    *jiraPassword,
 			ThrottleRPS: throttleRPS,
+			Days:        *jiraDays,
 		}
 		if ref, err := eng.ScanJira(ctx, cfg); err != nil {
 			return scanMetrics, fmt.Errorf("failed to scan Jira: %v", err)

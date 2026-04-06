@@ -37,22 +37,32 @@ offensiveboar filesystem /path/to/scan --custom-languages en,ru
 ```
 
 ### 🎫 Jira Integration
-OffensiveBoar can now scan Jira issues for leaked credentials:
-- **Supports both Jira Cloud and Jira Server/Data Center**
-- Scans all projects in your Jira instance
-- Analyzes all issues, including summaries, descriptions, and comments
-- Supports both plain text and ADF (Atlassian Document Format) content
-- Provides direct links back to the Jira issues where secrets were found
-- Automatically detects installation type (Cloud vs Server/DC) based on URL
+OffensiveBoar can scan Jira issues for leaked credentials across all three deployment types:
+- **Jira Cloud** — Basic Auth with email + API token, API v3
+- **Jira Server/Data Center (PAT)** — Bearer token, API v2
+- **Jira Server/Data Center (Basic Auth)** — username + password, API v2, no token creation needed
+- Scans all projects with pagination, analyzes summaries, descriptions, and comments (plain text + ADF)
+- Configurable request throttling to stay within API rate limits
+- `--days N` to scope scans to recently updated issues and comments only
 
-**Jira Cloud example:**
+**Jira Cloud:**
 ```bash
-offensiveboar jira --jira-url https://your-domain.atlassian.net --jira-email your-email@example.com --jira-token YOUR_API_TOKEN --custom-languages en,ru
+offensiveboar jira --jira-url https://your-domain.atlassian.net \
+  --jira-email your@email.com --jira-token YOUR_API_TOKEN \
+  --jira-throttle 10rps --days 7
 ```
 
-**Jira Server/Data Center example:**
+**Jira Server/DC — username + password (no token needed):**
 ```bash
-offensiveboar jira --jira-url https://your-jira-instance.com --jira-token YOUR_BEARER_TOKEN --custom-languages en,ru
+offensiveboar jira --jira-url https://jira.corp.local \
+  --jira-username admin --jira-password secret \
+  --jira-throttle 5rps --days 2
+```
+
+**Jira Server/DC — Bearer token / PAT:**
+```bash
+offensiveboar jira --jira-url https://jira.corp.local \
+  --jira-token YOUR_PAT --jira-throttle 5rps
 ```
 
 ### 🔐 Enhanced Token Detection
@@ -79,12 +89,22 @@ offensiveboar github --org=your-org --results=verified
 
 **Jira Cloud:**
 ```bash
-offensiveboar jira --jira-url https://your-domain.atlassian.net --jira-email your-email@example.com --jira-token YOUR_API_TOKEN --custom-languages en,ru
+offensiveboar jira --jira-url https://your-domain.atlassian.net \
+  --jira-email your@email.com --jira-token YOUR_API_TOKEN \
+  --custom-languages en,ru
 ```
 
-**Jira Server/Data Center:**
+**Jira Server/DC — username + password:**
 ```bash
-offensiveboar jira --jira-url https://your-jira.com --jira-token YOUR_BEARER_TOKEN --custom-languages en,ru
+offensiveboar jira --jira-url https://jira.corp.local \
+  --jira-username admin --jira-password secret \
+  --custom-languages en,ru
+```
+
+**Jira Server/DC — Bearer token/PAT:**
+```bash
+offensiveboar jira --jira-url https://jira.corp.local \
+  --jira-token YOUR_PAT --custom-languages en,ru
 ```
 
 ## 4: Scan filesystem with multi-language support
@@ -164,50 +184,86 @@ offensiveboar filesystem --help
 
 ## Jira Scanning
 
-OffensiveBoar supports both **Jira Cloud** and **Jira Server/Data Center** instances.
+OffensiveBoar supports **Jira Cloud** and **Jira Server/Data Center** with three authentication modes.
+
+### Authentication modes
+
+| Mode | Flags | When to use |
+|------|-------|-------------|
+| Cloud (Basic Auth) | `--jira-email` + `--jira-token` | Jira Cloud (`*.atlassian.net`) |
+| Server/DC Bearer | `--jira-token` | Server/DC with PAT (DC 8.14+) |
+| Server/DC Basic Auth | `--jira-username` + `--jira-password` | On-prem, no token creation needed |
 
 ### Jira Cloud
 
-For Jira Cloud instances (URLs ending with `.atlassian.net`), you need to provide your email and API token:
-
 ```bash
-offensiveboar jira --jira-url https://your-domain.atlassian.net --jira-email your-email@example.com --jira-token YOUR_API_TOKEN
+offensiveboar jira \
+  --jira-url https://your-domain.atlassian.net \
+  --jira-email your@email.com \
+  --jira-token YOUR_API_TOKEN
 ```
 
 **Getting a Jira Cloud API token:**
 1. Go to https://id.atlassian.com/manage-profile/security/api-tokens
 2. Click "Create API token"
-3. Copy the token and use it with your email address
+3. Use it together with your Atlassian account email
 
-### Jira Server/Data Center
+### Jira Server/Data Center — username + password
 
-For on-premise Jira instances, use a Bearer token:
-
-```bash
-offensiveboar jira --jira-url https://your-jira-instance.com --jira-token YOUR_BEARER_TOKEN
-```
-
-### With Multi-Language Support
-
-Both Cloud and Server support multi-language detection:
+Works on any Jira Server or Data Center without creating tokens:
 
 ```bash
-# Cloud
-offensiveboar jira --jira-url https://your-domain.atlassian.net --jira-email your-email@example.com --jira-token YOUR_API_TOKEN --custom-languages en,ru
-
-# Server/DC
-offensiveboar jira --jira-url https://your-jira-instance.com --jira-token YOUR_BEARER_TOKEN --custom-languages en,ru
+offensiveboar jira \
+  --jira-url https://jira.corp.local \
+  --jira-username admin \
+  --jira-password secret
 ```
+
+### Jira Server/Data Center — Bearer token / PAT
+
+Requires Data Center 8.14+ or Server with PAT support:
+
+```bash
+offensiveboar jira \
+  --jira-url https://jira.corp.local \
+  --jira-token YOUR_PAT
+```
+
+### Throttling
+
+Use `--jira-throttle` to stay within API rate limits:
+
+```bash
+# Jira Cloud limit is ~10 req/s
+offensiveboar jira --jira-url ... --jira-throttle 10rps
+
+# Be polite on a production on-prem instance
+offensiveboar jira --jira-url ... --jira-throttle 30rpm
+```
+
+Supported formats: `unlimited` (default), `10rps`, `5ps`, `30rpm`, `10rpm`, `1rpm`, `1rph`
+
+### Scanning only recent activity
+
+Use `--days N` to limit the scan to issues and comments updated in the last N days:
+
+```bash
+# Scan only issues updated in the last 2 days
+offensiveboar jira --jira-url ... --jira-token ... --days 2
+
+# Daily incremental scan
+offensiveboar jira --jira-url ... --jira-token ... --days 1
+```
+
+The date filter is applied at the JQL level (server-side) so only matching issues are fetched. Comments within those issues are additionally filtered by their own timestamp.
 
 ### How It Works
 
-The tool will:
-1. Automatically detect installation type (Cloud vs Server/DC) based on URL
-2. Use appropriate authentication method (Basic Auth for Cloud, Bearer for Server/DC)
-3. Fetch all projects from your Jira instance
-4. Retrieve all issues for each project with pagination
-5. Scan issue summaries, descriptions, and comments (including ADF format)
-6. Report any found secrets with direct links back to the Jira issues
+1. Auto-detects Cloud vs Server/DC from the URL (or explicit flags)
+2. Fetches all projects from the Jira instance
+3. Retrieves matching issues with pagination (JQL `updated >= date` when `--days` is set)
+4. Scans issue summaries, descriptions, and comments (plain text + ADF format)
+5. Reports found secrets with direct links to the Jira issues
 
 ## Multi-Language Secret Detection
 
@@ -241,18 +297,26 @@ Supported language codes: `en`, `ru`, `es`, `fr`, `de`, `it`, `pt`, `ja`, `zh`, 
   - Use the `--custom-languages` flag with comma-separated language codes. Example: `--custom-languages en,ru`
 
 - **What Jira permissions do I need?**
-  - **Jira Cloud**: Your API token needs permissions to read projects and issues. The user account associated with the email must have "Browse Projects" and "View Issues" permissions.
-  - **Jira Server/DC**: Your Bearer token must have permissions to access the REST API and read projects/issues.
+  - **Jira Cloud**: The account must have "Browse Projects" and "View Issues" permissions. Generate a token at https://id.atlassian.com/manage-profile/security/api-tokens
+  - **Jira Server/DC (Bearer)**: The PAT must have access to the REST API and read permissions on projects/issues
+  - **Jira Server/DC (Basic Auth)**: The user account must have "Browse Projects" and "View Issues" permissions — no token creation required
+
 - **How do I know if I'm using Cloud or Server/DC?**
-  - Cloud URLs typically end with `.atlassian.net` (e.g., `https://yourcompany.atlassian.net`)
-  - Server/DC URLs are usually custom domains (e.g., `https://jira.yourcompany.com`)
-  - OffensiveBoar automatically detects the type, but you can explicitly specify it if needed
+  - Cloud URLs end with `.atlassian.net` (e.g., `https://yourcompany.atlassian.net`)
+  - Server/DC URLs are custom domains (e.g., `https://jira.yourcompany.com`)
+  - OffensiveBoar auto-detects the type from the URL
+
+- **How do I avoid hammering the Jira API?**
+  - Use `--jira-throttle 10rps` for Cloud or `--jira-throttle 30rpm` for on-prem to limit request rate
+
+- **How do I scan only recent changes?**
+  - Use `--days N` to scan only issues updated in the last N days, e.g. `--days 1` for daily incremental scans
 
 # :newspaper: What's New in This Fork
 
 This fork of TruffleHog includes several enhancements:
 
-- **Jira Integration**: Scan all issues in your Jira instance for leaked credentials
+- **Jira Integration**: Scan all issues in your Jira instance for leaked credentials — supports Cloud, Server/DC Bearer, and Server/DC Basic Auth (username+password, no token needed); configurable throttling and `--days` filter for incremental scans
 - **Multi-Language Support**: Detect passwords and tokens in multiple languages (English, Russian, and more)
 - **Enhanced Token Detection**: Improved detection of various token formats including Authorization headers
 - **All Original Features**: Maintains all the powerful features from the original TruffleHog including:
